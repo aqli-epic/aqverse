@@ -3,7 +3,7 @@ Type: Package
 Title: Enabling Open Source Health Focused Air Quality Data Analysis
 Version: 0.1.0
 Author: Aarsh Batra
-Maintainer: aarshbatra@uchicagotrust.org  
+Maintainer: Aarsh Batra <aarshbatra@uchicagotrust.org>  
 Description: This package enables users to utilize the data processing 
              and visualization functionality underlying the AQLI project.
 License: What license is it under?
