@@ -1,11 +1,12 @@
 Package: aqverse
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Enabling Open Source Health Focused Air Quality Data Analysis
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: Aarsh Batra
+Maintainer: aarshbatra@uchicagotrust.org  
+Description: This package enables users to utilize the data processing 
+             and visualization functionality underlying the AQLI project.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.2.0
