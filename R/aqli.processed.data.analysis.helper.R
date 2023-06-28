@@ -52,6 +52,7 @@
 
 gadm_level_summary <- function(df, level_col_name_vec, years, perc_red_by){
 
+  le_constant <- 0.098
   pol_col_names <- stringr::str_c("pm", years)
   pol_col_names_red_to <- stringr::str_c("pm", years, "_reduced_to")
   llpp_who_col_names <- stringr::str_c("llpp_who_", years)
