@@ -20,7 +20,7 @@ below for more use cases.}
 \item{years}{a vector of years for which the summary data is needed, e.g. \code{c(1998, 2000, 2021)}.
 The 2023 AQLI dataset provides data on the following years 1998 to 2021.}
 
-\item{perc_red_by}{custom reduction percentage, i.e. if columns for custom reduction are needed. For example, if we want to see
+\item{perc_red_by}{custom reduction percentage (numeric), i.e. if columns for custom reduction are needed. For example, if we want to see
 pollution (and corresponding lyl) columns for a 10% reduction relative to the years specified, then this
 parameter would be 10.}
 }
