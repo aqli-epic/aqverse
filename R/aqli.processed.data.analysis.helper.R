@@ -212,7 +212,7 @@ themes_aqli_base <- ggthemes::theme_tufte() +
 #'                    \code{forcats::fct_reorder(lyldiff_bucket, order_lyldiff_bucket)}; \code{poldiff} scale:
 #'                    \code{forcats::fct_reorder(poldiff_bucket, order_poldiff_bucket)}
 #'
-#' @param col_name the column name (type:\code{character}) that will be used to map pollution/life years lost (whether
+#' @param col_name The column name (type:\code{character}) that will be used to map pollution/life years lost (whether
 #'                 single year or difference between 2 years) values to the AQLI colors. Note, that
 #'                 this column should be present in \code{df}.
 #'
@@ -321,3 +321,80 @@ add_aqli_color_scale_buckets <- function(df, scale_type = "pollution", col_name)
   }
 
 }
+
+
+#' Plot a histogram of pollution/life years lost columns in the AQLI dataset
+#'
+#' Plots a histogram of either pollution or life years lost values in AQLI color scale
+#'
+#' @importFrom stringr str_c
+#' @import ggplot2
+#'
+#' @param df An AQLI dataframe that contains the columns that will be used to plot the histogram.
+#' @param scale_type This can take one of 2 values \code{"pollution"} or \code{"lyl"}.
+#' @param col_name The column name (in quotes) from \code{df} for which the histogram is to be plotted.
+#' @param region_name Plot subtitle (in quotes)
+#'
+#'
+#' @examples
+#' df %>% aqli_hist(scale_type = "pollution", col_name = "pm2021", region_name = "")
+#' df %>% aqli_hist(scale_type == "lyl", col_name = "llpp_who_2021", region_name = "Delhi")
+#'
+#' @return returns a histogram plot based on the specifications provided.
+#'
+#'
+#'
+#' @export
+
+
+aqli_hist <- function(df, scale_type = "pollution", col_name = "pm2021", region_name = "enter region name"){
+  if(scale_type == "pollution"){
+    pol_year <- as.numeric(str_remove(col_name, "pm"))
+    x_axis_title <- str_c("Annual average PM2.5 in ", pol_year, "(µg/m³)")
+    y_axis_title <- "Number of people"
+    plot_title <- str_c("Distribution of Annual Average PM2.5 pollution in", pol_year)
+    plot_subtitle <- region_name
+    plot_caption <- "*AQLI only reports satellite derived annual average PM2.5 data"
+    legend_title <- "PM2.5 (in µg/m³)"
+    plt <- df %>%
+      add_aqli_color_scale_buckets(scale_type = "pollution", col_name = col_name) %>%
+      ggplot() +
+      geom_histogram(mapping = aes(x = !!as.symbol(col_name), weight = population, fill = !!as.symbol(col_name), group = !!as.symbol(col_name))) +
+      scale_fill_gradient(low = "#a1f5ff",
+                          high = "#1a1638") +
+      labs(x = x_axis_title, y = y_axis_title, title = plot_title, subtitle = plot_subtitle, caption = plot_caption,
+           fill = legend_title) +
+      themes_aqli_base
+    return(plt)
+
+  } else if(scale_type == "lyl"){
+    lyl_year <- as.numeric(str_remove(col_name, "llpp_who_"))
+    x_axis_title <- str_c("Life years lost to PM2.5 pollution in ", lyl_year)
+    y_axis_title <- "Number of people"
+    plot_title <- str_c("Distribution of life years lost to PM2.5 pollution in ", lyl_year)
+    plot_subtitle <- region_name
+    plot_caption <- "*AQLI only reports satellite derived annual average PM2.5 data."
+    legend_title <- "Life years lost"
+    plt <- df %>%
+      add_aqli_color_scale_buckets(scale_type = "lyl", col_name = col_name) %>%
+      ggplot() +
+      geom_histogram(mapping = aes(x = !!as.symbol(col_name), weight = population, fill = !!as.symbol(col_name), group = !!as.symbol(col_name))) +
+      labs(x = x_axis_title, y = y_axis_title, title = plot_title, subtitle = plot_subtitle, caption = plot_caption,
+           fill = legend_title) +
+      scale_fill_gradient(low = "#ffeda0",
+                          high = "#800026") +
+      themes_aqli_base
+
+
+
+
+    return(plt)
+
+  }
+}
+
+
+
+
+
+

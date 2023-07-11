@@ -22,7 +22,7 @@ add_aqli_color_scale_buckets(df, scale_type = "pollution", col_name)
                    \code{forcats::fct_reorder(lyldiff_bucket, order_lyldiff_bucket)}; \code{poldiff} scale:
                    \code{forcats::fct_reorder(poldiff_bucket, order_poldiff_bucket)}}
 
-\item{col_name}{the column name (type:\code{character}) that will be used to map pollution/life years lost (whether
+\item{col_name}{The column name (type:\code{character}) that will be used to map pollution/life years lost (whether
 single year or difference between 2 years) values to the AQLI colors. Note, that
 this column should be present in \code{df}.}
 }
