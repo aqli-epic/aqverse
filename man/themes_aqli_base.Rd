@@ -14,7 +14,7 @@ themes_aqli_base
 \item{""}{no parameters needed. See examples for usage.}
 }
 \value{
-when added to a plot, returns a plot with the AQLI plots theme.
+when added to a plot, returns a plot with the AQLI plots base theme.
 }
 \description{
 Adds a custom AQLI theme to plots in a single command

@@ -1,12 +1,12 @@
 Package: aqverse
 Type: Package
 Title: Enabling Open Source Health Focused Air Quality Data Analysis
-Version: 0.1.0
+Version: 0.2.0
 Author: Aarsh Batra
 Maintainer: Aarsh Batra <aarshbatra@uchicagotrust.org>  
 Description: This package enables users to utilize the data processing 
              and visualization functionality underlying the AQLI project.
-License: What license is it under?
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.0

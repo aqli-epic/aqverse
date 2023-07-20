@@ -34,10 +34,28 @@ devtools::install_github("aqli-epic/aqverse")
 
 Once installed, load the package into R as follows `library(aqverse)`
 
+## Get the data
 
-## Example use cases
-```{r example}
+AQLI June 2022 report data can be downloaded from the AQLI website [index](https://aqli.epic.uchicago.edu/the-index/) page, or you could write to us at aqli-info@uchicago.edu. In the last quarter of 2023 AQLI will be releasing a new and updated version of this report.
 
-# To be added
 
-```
+## Functionality
+
+This package in its current state contains a total of 8 functions, which allows you to do the following tasks:
+
+ * Collapse AQLI district (gadm2) level pollution and life years lost datasets to gadm1 (state/province), gadm0 (country) and continent level.
+ 
+ * Plot AQLI pollution and potential life expectancy gains maps for countries, states, districts (in AQLI color scale).
+ 
+ * Do country level comparisons of life expectancy lost to PM2.5 with other threats to life expectancy (Global Burden of Disease).
+ 
+ * Plot bar graphs for 'n' most/least polluted regions in a given country (in AQLI color scale).
+ 
+ * Plot bar graphs with 'n' most/least life years lost to air pollution in a given country/state/continent (in AQLI color scale).
+ 
+ * Plot distribution of pollution and life years lost in a given region.
+ 
+ * Add standardized themes to AQLI plots
+ 
+ * Plot timeseries plots for understanding pollution and life years lost trends.
+

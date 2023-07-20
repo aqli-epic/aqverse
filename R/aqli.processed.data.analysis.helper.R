@@ -1,5 +1,7 @@
 ##> AQLI processed data helper functions==================================================
 
+#-------------------------------------------------
+
 #' Collapse AQLIs most granular processed data to less granular levels
 #'
 #' AQLI (in 2021) reports annual average PM2.5 and life years lost at 3 levels:
@@ -167,12 +169,10 @@ gadm_level_summary <- function(df, level_col_name_vec, years, perc_red_by){
 #' plot1 + themes_aqli_base
 #' mtcars %>% ggplot2::ggplot() + ggplot2::geom_histogram(mapping = ggplot2::aes(mpg)) + themes_aqli_base
 #'
-#' @return when added to a plot, returns a plot with the AQLI plots theme.
+#' @return when added to a plot, returns a plot with the AQLI plots base theme.
 #'
 #'
 #' @export
-
-
 themes_aqli_base <- ggthemes::theme_tufte() +
   ggplot2::theme(plot.title = element_text(size = 18, hjust = 0.5, margin = margin(b = 0.2, unit = "cm")),
         plot.subtitle = element_text(size = 14, hjust = 0.5, margin = margin(b = 0.7, unit = "cm")),
@@ -227,9 +227,6 @@ themes_aqli_base <- ggthemes::theme_tufte() +
 #'
 #'
 #' @export
-#'
-
-
 add_aqli_color_scale_buckets <- function(df, scale_type = "pollution", col_name){
 
   # life years lost (single year) scale
@@ -322,6 +319,7 @@ add_aqli_color_scale_buckets <- function(df, scale_type = "pollution", col_name)
 
 }
 
+#----------------------------------------------------------
 
 #' Plot a histogram of pollution/life years lost columns in the AQLI dataset
 #'
@@ -329,6 +327,8 @@ add_aqli_color_scale_buckets <- function(df, scale_type = "pollution", col_name)
 #'
 #' @importFrom stringr str_c
 #' @import ggplot2
+#' @import ggthemes
+#' @importFrom aqverse add_aqli_color_scale_buckets themes_aqli_base
 #'
 #' @param df An AQLI dataframe that contains the columns that will be used to plot the histogram.
 #' @param scale_type This can take one of 2 values \code{"pollution"} or \code{"lyl"}.
@@ -393,8 +393,607 @@ aqli_hist <- function(df, scale_type = "pollution", col_name = "pm2021", region_
   }
 }
 
+#-----------------------------------------------------------
+
+
+#' Plot aqli pollution and life years lost bar graphs
+#'
+#' Plots pollution and life years lost regional bar graphs in AQLI colors.
+#'
+#' @import ggplot2
+#' @importFrom aqverse add_aqli_color_scale_buckets themes_aqli_base
+#'
+#' @param df AQLI data that will be used to plot the bar graph.
+#' @param scale_type One of \code{pollution} or \code{lyl}. Depends on the underlying underlying value of \code{y_var} column  (from \code{df}) that is plotted.
+#' @param x_var A column of type \code{character}, e.g. depending on the bar graph, this could be country, state, district. See examples below. Note
+#'              that this will end up being plotted on y axis as the function by default flips the axis using \code{coord_flip}. You can flip it back
+#'              by piping the output of this function again to \code{coord_flip}.
+#' @param y_var A column of type \code{numeric}, e.g. life years lost or pollution in a given year. Note that this will end up being plotted on y axis as the function by default flips the axis using \code{coord_flip}. You can flip it back
+#'              by piping the output of this function again to \code{coord_flip}.
+#'
+#' @param title The title of the bar graph.
+#' @param subtitle  The subtitle of the bar graph.
+#' @param x_label x-axis label of the graph.
+#' @param y_label  y-axis label of the graph.
+#' @param legend_title Title for the legend of the bar graph.
+#' @param caption Caption for the bar graph.
+#'
+#' @examples
+#'
+#' # Plotting the graph of life years lost relative to WHO guideline (llpp_who_2021) for all prefectures (name_2) of a aqli gadm2 dataset
+#' # that is filtered for China.
+#'
+#' df %>%
+#' aqli_bar(scale_type = "lyl", x_var = "name_2", y_var = "llpp_who_2021", title = "", subtitle = "", x_label = "Prefecture", y_label = "Potential Gain in Life Expectancy (Years)", legend_title = "Potential gain in life expectancy (Years)", caption = "") +
+#'  theme(plot.background = element_rect(fill = "white", color = "white"))
+#'
+#' @note
+#' Please note that the aqli color buckets should already be added to \code{df} using \code{add_aqli_color_scale_buckets} function before it gets
+#' feeded to \code{aqli_bar}
+#'
+#' @return returns a bar plot given the above specifications.
+#'
+#' @export
+
+
+aqli_bar <- function(df, scale_type = "pollution", x_var, y_var, title, subtitle, x_label, y_label, legend_title, caption){
+  if(scale_type == "pollution"){
+    plt <- df %>%
+      add_aqli_color_scale_buckets(scale_type = "pollution", col_name = y_var) %>%
+      ggplot() +
+      geom_col(mapping = aes(x = forcats::fct_reorder(!!as.symbol(x_var), !!as.symbol(y_var)), y = !!as.symbol(y_var), fill = forcats::fct_reorder(!!as.symbol("pol_bucket"), !!as.symbol("order_pol_bucket")))) +
+      scale_fill_manual(values = c("0 to < 5" = "#a1f5ff",
+                                   "5 to < 10" = "#92d4eb",
+                                   "10 to < 20" = "#82b5d5",
+                                   "20 to < 30" = "#7197be",
+                                   "30 to < 40" = "#5f7aa5",
+                                   "40 to < 50" = "#4e5e8b",
+                                   "50 to < 60" = "#3c456f",
+                                   "60 to < 70" = "#2b2d54",
+                                   ">= 70" = "#1a1638")) +
+      labs(x = x_label, y = y_label, title = title, subtitle = subtitle, caption = caption, fill = legend_title) +
+      themes_aqli_base +
+      coord_flip()
+    return(plt)
+
+  } else if(scale_type == "lyl"){
+    plt <- df %>%
+      add_aqli_color_scale_buckets(scale_type = "lyl", col_name = y_var) %>%
+      ggplot() +
+      geom_col(mapping = aes(x = forcats::fct_reorder(!!as.symbol(x_var), !!as.symbol(y_var)), y = !!as.symbol(y_var), fill = forcats::fct_reorder(!!as.symbol("lyl_bucket"), !!as.symbol("order_lyl_bucket")))) +
+      scale_fill_manual(values = c("0 to < 0.1" = "#ffffff",
+                                   "0.1 to < 0.5" = "#ffeda0",
+                                   "0.5 to < 1" = "#fed976",
+                                   "1 to < 2" = "#feb24c",
+                                   "2 to < 3" = "#fd8d3c",
+                                   "3 to < 4" = "#fc4e2a",
+                                   "4 to < 5" = "#e31a1c",
+                                   "5 to < 6" = "#bd0026",
+                                   ">= 6" = "#800026")) +
+      labs(x = x_label, y = y_label, title = title, subtitle = subtitle, caption = caption, fill = legend_title) +
+      themes_aqli_base +
+      coord_flip()
+    return(plt)
+
+  }
+}
+
+
+#------------------------------------------------------------
+
+#' Plot AQLI pollution time series plots (trendlines)
+#'
+#' Plots pollution trends at country, state and district levels
+#' from a given start year to a given end year
+#'
+#' @importFrom stringr str_c
+#' @import dplyr
+#' @import ggplot2
+#' @import ggthemes
+#' @importFrom tidyr pivot_longer
+#' @importFrom aqverse themes_aqli_base
+
+#'
+#' @param gadm2_file aqli gadm2 (district/county/prefecture level) master file.
+#' @param level one of \code{country}, \code{state} or \code{district}.
+#' @param country_name country for which (the country itself, or a region within that country) the trendlines are to be plotted. Defaults to "India".
+#' @param state_name state within the \code{country} specified for which (the state itself, or a region within that state) the
+#'                   trendlines are to be plotted. Defaults to "NCT of Delhi"
+#' @param district_name district within, the \code{state}, which is in \code{country} specified for which the
+#'                      trendlines are to be plotted. Defaults to "NCT of Delhi".
+#' @param start_year year from which the trendline will start (defaults to 1998).
+#' @param end_year year at which the trendline will end (defaults to 2021).
+#'
+#'
+#' @examples
+#'
+#' # this will produce a default trendlines plot for India from 1998 to 2021
+#' trendlines_aqli(gadm2_file)
+#'
+#' # this will produce a trendline for the state of Uttar Pradesh from the year 2003 to 2021
+#' trendlines_aqli(gadm2_file, level = "state", country_name = "India", state_name = "Uttar Pradesh", start_year = 2003, end_year = 2021)
+#'
+#' # this will produce a trendline for the district of Ghaziabad in the state of Uttar Pradesh in India from the year 2000 to 2021
+#' trendlines_aqli(gadm2_file, level = "state", country_name = "India", state_name = "Uttar Pradesh", district_name = "Ghaziabad", start_year = 2000, end_year = 2021)
+#'
+#' @return a trend lines plot from \code{start_year} to \code{end_year} for the region specificed at the level specified in \code{level}
+#'
+#' @export
+
+
+trendlines_aqli <- function(gadm2_file, level = "country", country_name = "India", state_name = "NCT of Delhi", district_name = "NCT of Delhi", start_year = 1998, end_year = 2021){
+
+  pm_weighted_col_start <- stringr::str_c("pm", start_year, "_weighted")
+  pm_weighted_col_end <- stringr::str_c("pm", end_year, "_weighted")
+
+  if(level == "country"){
+    trendlines_aqli_data <- gadm2_file %>%
+      dplyr::filter(!is.na(population)) %>%
+      dplyr::filter(country == country_name) %>%
+      dplyr::group_by(country) %>%
+      dplyr::mutate(pop_weights = population/sum(population, na.rm = TRUE),
+                    mutate(across(starts_with("pm"), ~.x*pop_weights, .names = "{col}_weighted"))) %>%
+      dplyr::summarise(across(ends_with("weighted"), sum)) %>%
+      tidyr::pivot_longer(cols = !!as.symbol(pm_weighted_col_start):!!as.symbol(pm_weighted_col_end) , names_to = "years",
+                          values_to = "pop_weighted_avg_pm2.5") %>%
+      dplyr::mutate(years = as.integer(unlist(str_extract(years, "\\d+"))),
+                    region = "National Average") %>%
+      dplyr::select(years, region, pop_weighted_avg_pm2.5)
+
+    trendlines_aqli_plt <- trendlines_aqli_data %>%
+      ggplot2::ggplot() +
+      ggplot2::geom_line(mapping = ggplot2::aes(x = years, y = pop_weighted_avg_pm2.5), lwd = 1.1,
+                         color = "darkred") +
+      ggplot2::scale_x_continuous(breaks = seq(start_year, end_year, 2)) +
+      # scale_y_continuous(breaks = seq(0, max(trendlines_aqli_data$pop_weighted_avg_pm2.5), 10)) +
+      ggthemes::theme_hc() +
+      ggplot2::labs(x = "Years",
+                    y = "Annual Average PM2.5 concentration (in µg/m3)") +
+      ggplot2::theme(legend.position = "bottom", legend.title = element_blank(),
+                     legend.text = element_text(size = 7),
+                     axis.title.y = element_text(size = 9),
+                     axis.title.x = element_text(size = 9)) +
+      themes_aqli_base
+
+
+  } else if (level == "state") {
+    trendlines_aqli_data <- gadm2_file %>%
+      dplyr::filter(!is.na(population)) %>%
+      dplyr::filter(country == country_name, name_1 == state_name) %>%
+      dplyr::group_by(country, name_1) %>%
+      dplyr::mutate(pop_weights = population/sum(population, na.rm = TRUE),
+                    mutate(across(starts_with("pm"), ~.x*pop_weights, .names = "{col}_weighted"))) %>%
+      dplyr::summarise(across(ends_with("weighted"), sum)) %>%
+      tidyr::pivot_longer(cols = !!as.symbol(pm_weighted_col_start):!!as.symbol(pm_weighted_col_end) , names_to = "years",
+                          values_to = "pop_weighted_avg_pm2.5") %>%
+      dplyr::mutate(years = as.integer(unlist(str_extract(years, "\\d+"))),
+                    region = "State Average") %>%
+      dplyr::select(years, region, pop_weighted_avg_pm2.5)
+
+    trendlines_aqli_plt <- trendlines_aqli_data %>%
+      ggplot2::ggplot() +
+      ggplot2::geom_line(mapping = ggplot2::aes(x = years, y = pop_weighted_avg_pm2.5), lwd = 1.1,
+                         color = "darkred") +
+      ggplot2::scale_x_continuous(breaks = seq(start_year, end_year, 2)) +
+      # scale_y_continuous(breaks = seq(0, max(trendlines_aqli_data$pop_weighted_avg_pm2.5), 10)) +
+      ggthemes::theme_hc() +
+      ggplot2::labs(x = "Years",
+                    y = "Annual Average PM2.5 concentration (in µg/m3)") +
+      ggplot2::theme(legend.position = "bottom", legend.title = element_blank(),
+                     legend.text = element_text(size = 7),
+                     axis.title.y = element_text(size = 9),
+                     axis.title.x = element_text(size = 9)) +
+      themes_aqli_base
+
+  } else if (level == "district") {
+    trendlines_aqli_data <- gadm2_file %>%
+      dplyr::filter(!is.na(population)) %>%
+      dplyr::filter(country == country_name, name_1 == state_name, name_2 == district_name) %>%
+      dplyr::group_by(country, name_1, name_2) %>%
+      dplyr::mutate(pop_weights = population/sum(population, na.rm = TRUE),
+                    mutate(across(starts_with("pm"), ~.x*pop_weights, .names = "{col}_weighted"))) %>%
+      dplyr::summarise(across(ends_with("weighted"), sum)) %>%
+      tidyr::pivot_longer(cols = !!as.symbol(pm_weighted_col_start):!!as.symbol(pm_weighted_col_end) , names_to = "years",
+                          values_to = "pop_weighted_avg_pm2.5") %>%
+      dplyr::mutate(years = as.integer(unlist(str_extract(years, "\\d+"))),
+                    region = "District Average") %>%
+      dplyr::select(years, region, pop_weighted_avg_pm2.5)
+
+    trendlines_aqli_plt <- trendlines_aqli_data %>%
+      ggplot2::ggplot() +
+      ggplot2::geom_line(mapping = ggplot2::aes(x = years, y = pop_weighted_avg_pm2.5), lwd = 1.1,
+                         color = "darkred") +
+      ggplot2::scale_x_continuous(breaks = seq(start_year, end_year, 2)) +
+      # scale_y_continuous(breaks = seq(0, max(trendlines_aqli_data$pop_weighted_avg_pm2.5), 10)) +
+      ggthemes::theme_hc() +
+      ggplot2::labs(x = "Years",
+                    y = "Annual Average PM2.5 concentration (in µg/m3)") +
+      ggplot2::theme(legend.position = "bottom", legend.title = element_blank(),
+                     legend.text = element_text(size = 7),
+                     axis.title.y = element_text(size = 9),
+                     axis.title.x = element_text(size = 9)) +
+      themes_aqli_base
+
+  }
+
+  return(trendlines_aqli_plt)
+
+}
+
+
+
+#------------------------------------------------------------
+
+
+#' Plot Country Level GBD Data
+#'
+#' Plots the GBD data for a specific country, filtering based on the number of most/least deadly threats to life expectancy.
+#'
+#' @param gbd_master_data The GBD master dataset for all countries.
+#' @param country_name The name of the country to plot the GBD data for. Default is "India".
+#' @param top_or_bottom Specify whether to consider the most or least deadly threats. Default is "most".
+#' @param n_threats The number of most or least deadly threats to consider. Default is 10.
+#'
+#' @import dplyr
+#' @import ggplot2
+#' @importFrom ggthemes theme_tufte
+#' @importFrom forcats fct_reorder
+#' @importFrom aqverse add_aqli_color_scale_buckets themes_aqli_base
+#'
+#' @examples
+#' plot_country_level_gbd(gbd_master_data, country_name = "India", degree = "most", n_threats = 10)
+#'
+#' @return A plot representing the GBD data for the specified country and threats.
+#'
+#' @export
+
+plot_country_level_gbd <- function(gbd_master_data, country_name = "India", degree = "most", n_threats = 10){
+
+  # filter GBD data to a particular country and to a given number of threats top or bottom
+
+  if(top_or_bottom == "most"){
+    gbd_data_region <- gbd_results_master_2021 %>%
+      filter(country == country_name) %>%
+      slice_max(lyl, n = n_threats)
+  } else if (top_or_bottom == "least"){
+    gbd_data_region <- gbd_results_master_2021 %>%
+      filter(country == country_name) %>%
+      slice_min(lyl, n = n_threats)
+  }
+
+  colnames(gbd_data_region)[3] <- c("llpp_who_2021")
+
+  gbd_data_region <- gbd_data_region %>%
+    add_aqli_color_scale_buckets("lyl", "llpp_who_2021")
+
+  gbd_plot <- gbd_data_region %>%
+    ggplot() +
+    geom_col(mapping = aes(x = forcats::fct_reorder(cause_of_death, llpp_who_2021), y = llpp_who_2021, fill = forcats::fct_reorder(lyl_bucket, order_lyl_bucket)), width = 0.4, color = "black") +
+    labs(x = "Threats to Life Expectancy", y = "Life Years Lost", fill = "Life years lost",
+         title = "") +
+    coord_flip() +
+    ggthemes::theme_tufte() +
+    themes_aqli_base +
+    theme(legend.position = "bottom",
+          axis.text = element_text(size = 14),
+          axis.title.y = element_text(size = 16, margin = margin(r = 0.6, unit = "cm")),
+          axis.title.x = element_text(size = 16, margin = margin(t = 0.6, b = 0.6, unit = "cm")),
+          plot.caption = element_text(hjust = 0, size = 8, margin = margin(t = 0.8, unit = "cm")),
+          plot.title = element_text(hjust = 0.5, size = 20, margin = margin(b = 0.8, unit = "cm")),
+          plot.subtitle = element_text(hjust = 0.5, size = 10, margin = margin(b = 0.8, unit = "cm")),
+          legend.box.background = element_rect(color = "black"),
+          plot.background = element_rect(fill = "white", color = "white"),
+          axis.line = element_line(),
+          legend.text = element_text(size = 11),
+          legend.title = element_text(size = 14),
+          panel.grid.major.y = element_blank()) +
+    scale_y_continuous(breaks = seq(0, 7, 1)) +
+    # scale_x_discrete(limits = cause_of_death_ordered[seq(1, length(cause_of_death_ordered), by = 2)]) +
+    scale_fill_manual(values = c("0 to < 0.1" = "#ffffff",
+                                 "0.1 to < 0.5" = "#ffeda0",
+                                 "0.5 to < 1" = "#fed976",
+                                 "1 to < 2" = "#feb24c",
+                                 "2 to < 3" = "#fd8d3c",
+                                 "3 to < 4" = "#fc4e2a",
+                                 "4 to < 5" = "#e31a1c",
+                                 "5 to < 6" = "#bd0026",
+                                 ">= 6" = "#800026")) +
+    guides(fill = guide_legend(nrow = 1))
+
+  return(gbd_plot)
+
+}
 
 
 
 
 
+
+#--------------------------------------------------------------
+
+#' Plot AQLI and life expectancy gains single year maps
+#'
+#' This function takes in AQLI (Air Quality Life Index) and life expectancy data in CSV format, a
+#' and geographic shapefiles representing different administrative levels. It generates a map visualizing
+#' either the potential gain in life expectancy or air pollution levels (PM2.5) for a specific region
+#' (country, state, or district) based on the specified parameters.
+#'
+#' @param gadm2_aqli_csv A CSV file containing AQLI and life expectancy data at the GADM2 (district/county/prefecture) level.
+#' @param gadm2_aqli_shapefile A geographic shapefile for GADM2 (district/county etc) administrative level polygons.
+#' @param gadm1_aqli_shapefile A geographic shapefile for GADM1 (state/provinces) administrative level polygons.
+#' @param gadm0_aqli_shapefile A geographic shapefile for GADM0 (country) administrative level polygons.
+#' @param region_level The administrative level of the region to plot (country, state, or district).
+#' @param col_name_plt The name of the column in the CSV containing pollution or potential life expectancy gains data.
+#' @param plot_type The type of plot: "lyl" for life expectancy or "pollution" for AQI.
+#' @param country_name The name of the country for which to generate the map.
+#' @param state_name The name of the state (if applicable) for which to generate the map.
+#' @param district_name The name of the district (if applicable) for which to generate the map.
+#'
+#' @return A ggplot object displaying the map.
+#'
+#' @import ggplot2
+#' @import dplyr
+#' @import sf
+#' @import ggthemes
+#' @import forcats
+#'
+#' @examples
+#' plot_aqli_pol_lyl_map(gadm2_aqli_csv, gadm2_aqli_shapefile, gadm1_aqli_shapefile, gadm0_aqli_shapefile, "state", "llpp_who_2021", "lyl", "India", "Karnataka", NULL)
+#'
+#' @export
+plot_aqli_pol_lyl_map <- function(gadm2_aqli_csv, gadm2_aqli_shapefile, gadm1_aqli_shapefile, gadm0_aqli_shapefile, region_level, col_name_plt, plot_type, country_name, state_name, district_name){
+
+  if(region_level == "country"){
+    map_data <- gadm2_aqli_csv %>%
+      filter(country == country_name) %>%
+      left_join(gadm2_aqli_shapefile, by = c("objectid_gadm2" = "obidgadm2"))
+  } else if (region_level == "state"){
+    map_data <- gadm2_aqli_csv %>%
+      filter(country == country_name, name_1 == state_name) %>%
+      left_join(gadm2_aqli_shapefile, by = c("objectid_gadm2" = "obidgadm2"))
+
+  } else if (region_level == "district"){
+    map_data <- gadm2_aqli_csv %>%
+      filter(country == country_name, name_1 == state_name, name_2 == district_name) %>%
+      left_join(gadm2_aqli_shapefile, by = c("objectid_gadm2" = "obidgadm2"))
+  }
+
+  tmp_breaker <- 999
+
+  #-----------------------------------lyl-----------------------------------#
+  if(plot_type == "lyl"){
+   map_data <- map_data %>%
+      add_aqli_color_scale_buckets("lyl", col_name_plt) %>%
+      select(-geometry, geometry) %>%
+      st_as_sf()
+   if(region_level == "country"){
+     plt <- map_data %>%
+     ggplot() +
+       geom_sf(mapping = aes(fill = forcats::fct_reorder(lyl_bucket, order_lyl_bucket)), color = "lightgrey", lwd = 0.05) +
+       geom_sf(data = gadm1_aqli_shapefile %>% filter(name0 == country_name), color = "black", fill = "transparent", lwd = 0.5) +
+       ggthemes::theme_map() +
+       scale_fill_manual(values = c("0 to < 0.1" = "#ffffff",
+                                    "0.1 to < 0.5" = "#ffeda0",
+                                    "0.5 to < 1" = "#fed976",
+                                    "1 to < 2" = "#feb24c",
+                                    "2 to < 3" = "#fd8d3c",
+                                    "3 to < 4" = "#fc4e2a",
+                                    "4 to < 5" = "#e31a1c",
+                                    "5 to < 6" = "#bd0026",
+                                    ">= 6" = "#800026")) +
+       ggthemes::theme_map() +
+       labs(fill = "Potential gain in life expectancy (Years) ", title = "") +
+       theme(legend.position = "bottom",
+             legend.justification = c(0.5, 3),
+             legend.background = element_rect(color = "black"),
+             legend.text = element_text(size = 14),
+             legend.title = element_text(size = 15),
+             plot.title = element_text(hjust = 0.5, size = 15),
+             # legend.key = element_rect(color = "black"),
+             legend.box.margin = margin(b = 1, unit = "cm"),
+             plot.subtitle = element_text(hjust = 0.5, size = 7),
+             plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
+             legend.key = element_rect(color = "black"),
+             legend.box.spacing = unit(0, "cm"),
+             legend.direction = "horizontal",
+             plot.background = element_rect(fill = "white", color = "white")) +
+       guides(fill = guide_legend(nrow = 1))
+
+     return(plt)
+   } else if (region_level == "state"){
+    plt <-  map_data %>%
+       ggplot() +
+       geom_sf(mapping = aes(fill = forcats::fct_reorder(lyl_bucket, order_lyl_bucket)), color = "lightgrey", lwd = 0.05) +
+       geom_sf(data = gadm1_aqli_shapefile %>% filter(name0 == country_name, name1  == state_name), color = "black", fill = "transparent", lwd = 0.5) +
+       ggthemes::theme_map() +
+       scale_fill_manual(values = c("0 to < 0.1" = "#ffffff",
+                                    "0.1 to < 0.5" = "#ffeda0",
+                                    "0.5 to < 1" = "#fed976",
+                                    "1 to < 2" = "#feb24c",
+                                    "2 to < 3" = "#fd8d3c",
+                                    "3 to < 4" = "#fc4e2a",
+                                    "4 to < 5" = "#e31a1c",
+                                    "5 to < 6" = "#bd0026",
+                                    ">= 6" = "#800026")) +
+       ggthemes::theme_map() +
+       labs(fill = "Potential gain in life expectancy (Years) ", title = "") +
+       theme(legend.position = "bottom",
+             legend.justification = c(0.5, 3),
+             legend.background = element_rect(color = "black"),
+             legend.text = element_text(size = 14),
+             legend.title = element_text(size = 15),
+             plot.title = element_text(hjust = 0.5, size = 15),
+             # legend.key = element_rect(color = "black"),
+             legend.box.margin = margin(b = 1, unit = "cm"),
+             plot.subtitle = element_text(hjust = 0.5, size = 7),
+             plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
+             legend.key = element_rect(color = "black"),
+             legend.box.spacing = unit(0, "cm"),
+             legend.direction = "horizontal",
+             plot.background = element_rect(fill = "white", color = "white")) +
+       guides(fill = guide_legend(nrow = 1))
+
+    return(plt)
+
+   } else if (region_level == "district"){
+    plt <- map_data %>%
+       ggplot() +
+       geom_sf(mapping = aes(fill = forcats::fct_reorder(lyl_bucket, order_lyl_bucket)), color = "lightgrey", lwd = 0.05) +
+       ggthemes::theme_map() +
+       scale_fill_manual(values = c("0 to < 0.1" = "#ffffff",
+                                    "0.1 to < 0.5" = "#ffeda0",
+                                    "0.5 to < 1" = "#fed976",
+                                    "1 to < 2" = "#feb24c",
+                                    "2 to < 3" = "#fd8d3c",
+                                    "3 to < 4" = "#fc4e2a",
+                                    "4 to < 5" = "#e31a1c",
+                                    "5 to < 6" = "#bd0026",
+                                    ">= 6" = "#800026")) +
+       ggthemes::theme_map() +
+       labs(fill = "Potential gain in life expectancy (Years) ", title = "") +
+       theme(legend.position = "bottom",
+             legend.justification = c(0.5, 3),
+             legend.background = element_rect(color = "black"),
+             legend.text = element_text(size = 14),
+             legend.title = element_text(size = 15),
+             plot.title = element_text(hjust = 0.5, size = 15),
+             # legend.key = element_rect(color = "black"),
+             legend.box.margin = margin(b = 1, unit = "cm"),
+             plot.subtitle = element_text(hjust = 0.5, size = 7),
+             plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
+             legend.key = element_rect(color = "black"),
+             legend.box.spacing = unit(0, "cm"),
+             legend.direction = "horizontal",
+             plot.background = element_rect(fill = "white", color = "white")) +
+       guides(fill = guide_legend(nrow = 1))
+
+     return(plt)
+
+   }
+
+   #--------------------pollution----------------------------------#
+
+  } else if (plot_type == "pollution"){
+   map_data <- map_data %>%
+      add_aqli_color_scale_buckets("pollution", col_name_plt) %>%
+      select(-geometry, geometry) %>%
+      st_as_sf()
+
+   if(region_level == "country"){
+     plt <- map_data %>%
+       ggplot() +
+       geom_sf(mapping = aes(fill = forcats::fct_reorder(pol_bucket, order_pol_bucket)), color = "lightgrey", lwd = 0.05) +
+       geom_sf(data = gadm1_aqli_shapefile %>% filter(name0 == country_name), color = "black", fill = "transparent", lwd = 0.5) +
+       ggthemes::theme_map() +
+       scale_fill_manual(values = c("0 to < 5" = "#a1f5ff",
+                                    "5 to < 10" = "#92d4eb",
+                                    "10 to < 20" = "#82b5d5",
+                                    "20 to < 30" = "#7197be",
+                                    "30 to < 40" = "#5f7aa5",
+                                    "40 to < 50" = "#4e5e8b",
+                                    "50 to < 60" = "#3c456f",
+                                    "60 to < 70" = "#2b2d54",
+                                    ">= 70" = "#1a1638")) +
+       ggthemes::theme_map() +
+       labs(fill = expression("Annual Average" ~ PM[2.5] ~ " (in µg/m³)"), title = "") +
+       theme(legend.position = "bottom",
+             legend.justification = c(0.5, 3),
+             legend.background = element_rect(color = "black"),
+             legend.text = element_text(size = 14),
+             legend.title = element_text(size = 15),
+             plot.title = element_text(hjust = 0.5, size = 15),
+             # legend.key = element_rect(color = "black"),
+             legend.box.margin = margin(b = 1, unit = "cm"),
+             plot.subtitle = element_text(hjust = 0.5, size = 7),
+             plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
+             legend.key = element_rect(color = "black"),
+             legend.box.spacing = unit(0, "cm"),
+             legend.direction = "horizontal",
+             plot.background = element_rect(fill = "white", color = "white")) +
+       guides(fill = guide_legend(nrow = 1))
+
+     return(plt)
+   } else if (region_level == "state"){
+     plt <- map_data %>%
+       ggplot() +
+       geom_sf(mapping = aes(fill = forcats::fct_reorder(pol_bucket, order_pol_bucket)), color = "lightgrey", lwd = 0.05) +
+       geom_sf(data = gadm1_aqli_shapefile %>% filter(name0 == country_name, name1 == state_name), color = "black", fill = "transparent", lwd = 0.5) +
+       ggthemes::theme_map() +
+       scale_fill_manual(values = c("0 to < 5" = "#a1f5ff",
+                                    "5 to < 10" = "#92d4eb",
+                                    "10 to < 20" = "#82b5d5",
+                                    "20 to < 30" = "#7197be",
+                                    "30 to < 40" = "#5f7aa5",
+                                    "40 to < 50" = "#4e5e8b",
+                                    "50 to < 60" = "#3c456f",
+                                    "60 to < 70" = "#2b2d54",
+                                    ">= 70" = "#1a1638")) +
+       ggthemes::theme_map() +
+       labs(fill = expression("Annual Average" ~ PM[2.5] ~ " (in µg/m³)"), title = "") +
+       theme(legend.position = "bottom",
+             legend.justification = c(0.5, 3),
+             legend.background = element_rect(color = "black"),
+             legend.text = element_text(size = 14),
+             legend.title = element_text(size = 15),
+             plot.title = element_text(hjust = 0.5, size = 15),
+             # legend.key = element_rect(color = "black"),
+             legend.box.margin = margin(b = 1, unit = "cm"),
+             plot.subtitle = element_text(hjust = 0.5, size = 7),
+             plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
+             legend.key = element_rect(color = "black"),
+             legend.box.spacing = unit(0, "cm"),
+             legend.direction = "horizontal",
+             plot.background = element_rect(fill = "white", color = "white")) +
+       guides(fill = guide_legend(nrow = 1))
+
+     return(plt)
+
+   } else if (region_level == "district"){
+     plt <- map_data %>%
+       ggplot() +
+       geom_sf(mapping = aes(fill = forcats::fct_reorder(pol_bucket, order_pol_bucket)), color = "lightgrey", lwd = 0.05) +
+       ggthemes::theme_map() +
+       scale_fill_manual(values = c("0 to < 5" = "#a1f5ff",
+                                    "5 to < 10" = "#92d4eb",
+                                    "10 to < 20" = "#82b5d5",
+                                    "20 to < 30" = "#7197be",
+                                    "30 to < 40" = "#5f7aa5",
+                                    "40 to < 50" = "#4e5e8b",
+                                    "50 to < 60" = "#3c456f",
+                                    "60 to < 70" = "#2b2d54",
+                                    ">= 70" = "#1a1638")) +
+       ggthemes::theme_map() +
+       labs(fill = expression("Annual Average" ~ PM[2.5] ~ " (in µg/m³)"), title = "") +
+       theme(legend.position = "bottom",
+             legend.justification = c(0.5, 3),
+             legend.background = element_rect(color = "black"),
+             legend.text = element_text(size = 14),
+             legend.title = element_text(size = 15),
+             plot.title = element_text(hjust = 0.5, size = 15),
+             # legend.key = element_rect(color = "black"),
+             legend.box.margin = margin(b = 1, unit = "cm"),
+             plot.subtitle = element_text(hjust = 0.5, size = 7),
+             plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
+             legend.key = element_rect(color = "black"),
+             legend.box.spacing = unit(0, "cm"),
+             legend.direction = "horizontal",
+             plot.background = element_rect(fill = "white", color = "white")) +
+       guides(fill = guide_legend(nrow = 1))
+
+   }
+
+  }
+
+}
+
+
+
+#-------------------------------------------------------------
+
+#' percent of population in a given region, between x and y micrograms per cubic meter (upcoming)
+#'
+#'
+
+#-------------------------------------------------------------
+
+#'
