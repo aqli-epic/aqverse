@@ -6,7 +6,11 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of aqverse is to …
+The goal of aqverse is to enable replication of our analysis that feeds
+into our reports, map and our website. Upcoming versions of this package
+will have all functionality inbuilt in our underlying satellite data
+processing pipeline and this will serve as a meta-package for all other
+packages.
 
 ## Installation
 
@@ -31,8 +35,8 @@ AQLI will be releasing a new and updated version of this report.
 
 ## Functionality
 
-This package in its current state contains a total of 8 functions, which
-allows you to do the following tasks:
+This package in its current state contains a total of 8 functions and is
+under active development which allows you to do the following tasks:
 
 - Collapse AQLI district (gadm2) level pollution and life years lost
   datasets to gadm1 (state/province), gadm0 (country) and continent
