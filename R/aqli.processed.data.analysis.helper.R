@@ -987,6 +987,118 @@ plot_aqli_pol_lyl_map <- function(gadm2_aqli_csv, gadm2_aqli_shapefile, gadm1_aq
 }
 
 
+#------------------------------------------------------------
+
+#' AQLI website map summary sentence cross-check function
+
+
+
+
+aqli_map_sentence_stats <- function(df, level = "global", data_type = "lyl", year1_col = "llpp_who_2021",
+                                    year2_col = "llpp_who_2014", country_name = "India",
+                                    state_name = "Uttar Pradesh", district_name = "Ghaziabad"){
+
+  # global----------
+  if(level == "global"){
+
+    if(data_type == "lyl"){
+      df %>%
+        mutate(pop_weights = population/sum(population, na.rm = TRUE),
+               lyl_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
+               lyl_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
+        summarise(avg_lyl_year1 = round(sum(lyl_year1_weighted, na.rm = TRUE), 2),
+                  avg_lyl_year2 = round(sum(lyl_year2_weighted, na.rm = TRUE), 2)) %>%
+        mutate(lyl_diff = avg_lyl_year1 - avg_lyl_year2)
+    } else if(data_type == "pol"){
+      df %>%
+        mutate(pop_weights = population/sum(population, na.rm = TRUE),
+               pm_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
+               pm_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
+        summarise(avg_pm_year1 = round(sum(pm_year1_weighted, na.rm = TRUE), 2),
+                  avg_pm_year2 = round(sum(pm_year2_weighted, na.rm = TRUE), 2)) %>%
+        mutate(perc_change = ((avg_pm_year1 - avg_pm_year2)/avg_pm_year2)*100)
+
+    }
+  } else if(level == "country"){
+
+    if(data_type == "lyl"){
+      df %>%
+        filter(country == country_name) %>%
+        mutate(pop_weights = population/sum(population, na.rm = TRUE),
+               lyl_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
+               lyl_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
+        summarise(avg_lyl_year1 = round(sum(lyl_year1_weighted, na.rm = TRUE), 2),
+                  avg_lyl_year2 = round(sum(lyl_year2_weighted, na.rm = TRUE), 2)) %>%
+        mutate(lyl_diff = avg_lyl_year1 - avg_lyl_year2)
+    } else if(data_type == "pol"){
+      df %>%
+        filter(country == country_name) %>%
+        mutate(pop_weights = population/sum(population, na.rm = TRUE),
+               pm_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
+               pm_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
+        summarise(avg_pm_year1 = round(sum(pm_year1_weighted, na.rm = TRUE), 2),
+                  avg_pm_year2 = round(sum(pm_year2_weighted, na.rm = TRUE), 2)) %>%
+        mutate(perc_change = ((avg_pm_year1 - avg_pm_year2)/avg_pm_year2)*100)
+
+    }
+
+  } else if(level == "state"){
+
+  if(data_type == "lyl"){
+    df %>%
+      filter(country == country_name, name_1 == state_name) %>%
+      mutate(pop_weights = population/sum(population, na.rm = TRUE),
+             lyl_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
+             lyl_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
+      summarise(avg_lyl_year1 = round(sum(lyl_year1_weighted, na.rm = TRUE), 2),
+                avg_lyl_year2 = round(sum(lyl_year2_weighted, na.rm = TRUE), 2)) %>%
+      mutate(lyl_diff = avg_lyl_year1 - avg_lyl_year2)
+} else if(data_type == "pol"){
+    df %>%
+      filter(country == country_name, name_1 == state_name) %>%
+      mutate(pop_weights = population/sum(population, na.rm = TRUE),
+             pm_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
+             pm_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
+    summarise(avg_pm_year1 = round(sum(pm_year1_weighted, na.rm = TRUE), 2),
+              avg_pm_year2 = round(sum(pm_year2_weighted, na.rm = TRUE), 2)) %>%
+    mutate(perc_change = ((avg_pm_year1 - avg_pm_year2)/avg_pm_year2)*100)
+
+
+}
+
+
+
+} else if(level == "district"){
+
+  if(data_type == "lyl"){
+    df %>%
+      filter(country == country_name, name_1 == state_name, name_2 == district_name) %>%
+      mutate(pop_weights = population/sum(population, na.rm = TRUE),
+             lyl_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
+             lyl_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
+      summarise(avg_lyl_year1 = round(sum(lyl_year1_weighted, na.rm = TRUE), 2),
+                avg_lyl_year2 = round(sum(lyl_year2_weighted, na.rm = TRUE), 2)) %>%
+      mutate(lyl_diff = avg_lyl_year1 - avg_lyl_year2)
+  } else if(data_type == "pol"){
+    df %>%
+      filter(country == country_name, name_1 == state_name, name_2 == district_name) %>%
+      mutate(pop_weights = population/sum(population, na.rm = TRUE),
+             pm_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
+             pm_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
+      summarise(avg_pm_year1 = round(sum(pm_year1_weighted, na.rm = TRUE), 2),
+                avg_pm_year2 = round(sum(pm_year2_weighted, na.rm = TRUE), 2)) %>%
+      mutate(perc_change = ((avg_pm_year1 - avg_pm_year2)/avg_pm_year2)*100)
+
+  }
+
+
+}
+
+}
+
+
+
+
 
 #-------------------------------------------------------------
 
