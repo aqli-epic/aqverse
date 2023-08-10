@@ -2,7 +2,6 @@ Package: aqverse
 Type: Package
 Title: Enabling Open Source Health Focused Air Quality Data Analysis
 Version: 0.2.0
-Depends:  R (>= 3.0.0)
 Imports: aqverse, dplyr, forcats, ggplot2, ggthemes, sf, stringr, tidyr
 Author: Aarsh Batra
 Maintainer: Aarsh Batra <aarshbatra@uchicagotrust.org>  
