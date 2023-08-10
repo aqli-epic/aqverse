@@ -8,7 +8,7 @@
 
 The goal of aqverse is to enable replication of our analysis that feeds
 into our reports, map and our website. Upcoming versions of this package
-will have all functionality inbuilt in our underlying satellite data
+will have all functionality in-built in our underlying satellite data
 processing pipeline and this will serve as a meta-package for all other
 packages.
 
