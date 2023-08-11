@@ -25,7 +25,8 @@ You can install the development version of aqverse from
 
 ## Load the package
 
-Once installed, load the package into R as follows `library(aqverse)`
+Once installed, load the package into your R environment as follows
+`library(aqverse)`
 
 ## Get the data
 
