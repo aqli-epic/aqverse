@@ -26,8 +26,3 @@ returns a histogram plot based on the specifications provided.
 \description{
 Plots a histogram of either pollution or life years lost values in AQLI color scale
 }
-\examples{
-df \%>\% aqli_hist(scale_type = "pollution", col_name = "pm2021", region_name = "")
-df \%>\% aqli_hist(scale_type == "lyl", col_name = "llpp_who_2021", region_name = "Delhi")
-
-}

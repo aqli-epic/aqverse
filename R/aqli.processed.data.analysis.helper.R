@@ -18,6 +18,7 @@
 #'
 #' @importFrom stringr str_c
 #' @import dplyr
+#' @import magrittr
 #'
 #'
 #'
@@ -37,13 +38,6 @@
 #' @param perc_red_by custom reduction percentage (numeric), i.e. if columns for custom reduction are needed. For example, if we want to see
 #'                    pollution (and corresponding lyl) columns for a 10% reduction relative to the years specified, then this
 #'                    parameter would be 10.
-#'
-#'
-#' @examples
-#' gadm_level_summary(gadm2_aqli_2021, c("country"), c(2021), 10) # country (gadm0) level summary for the year 2021, with 10% custom reduction column
-#' gadm_level_summary(gadm2_aqli_2021, c("country", "name_1"), c(2021), 10) # state (gadm1) level summary for the year 2021, with 10% custom reduction column
-#' gadm_level_summary(gadm2_aqli_2021, c("continent"), c(2021), 10) # continent level summary for the year 2021, with 10% custom reduction column
-#' gadm_level_summary(gadm2_aqli_2021, c("country", "name_1", "name_2"), c(2021), 10) # district (gadm0) level summary for the year 2021, with 10% custom reduction column
 #'
 #'
 #' @return returns a collapsed dataset with
@@ -165,9 +159,6 @@ gadm_level_summary <- function(df, level_col_name_vec, years, perc_red_by){
 #'
 #' @param "" no parameters needed. See examples for usage.
 #'
-#' @examples
-#' plot1 + themes_aqli_base
-#' mtcars %>% ggplot2::ggplot() + ggplot2::geom_histogram(mapping = ggplot2::aes(mpg)) + themes_aqli_base
 #'
 #' @return when added to a plot, returns a plot with the AQLI plots base theme.
 #'
@@ -197,12 +188,13 @@ themes_aqli_base <- ggthemes::theme_tufte() +
 #' This function comes in handy while plotting graphs that need to be colored according to AQLI color scales.
 #'
 #' @importFrom dplyr mutate
+#' @import magrittr
 #'
 #' @param df The dataframe to which the AQLI color scales will be added as a character column
 #' @param scale_type This is a parameter of type \code{character} and can take one of 4 values: (a) \code{lyl}: AQLI life years lost (single year);
-#'                   (b) \code{pollution}: AQLI pollution (in µg/m³, single year); (c) \code{lyldiff}:
+#'                   (b) \code{pollution}: AQLI pollution (in micrograms per cubic meter, single year); (c) \code{lyldiff}:
 #'                   Life years lost scale (for difference between 2 years); (d) \code{poldiff}: pollution
-#'                   difference between 2 years scale (in %).
+#'                   difference between 2 years scale (in percent).
 #'
 #'                   Note that, while plotting the actual map
 #'                   that will use this function, make sure to add in the \code{fill} aesthetic of the mapping
@@ -216,11 +208,6 @@ themes_aqli_base <- ggthemes::theme_tufte() +
 #'                 single year or difference between 2 years) values to the AQLI colors. Note, that
 #'                 this column should be present in \code{df}.
 #'
-#' @examples
-#' df %>% add_aqli_color_scale_buckets(scale_type = "pollution", col_name = "pm2021")
-#' df %>% add_aqli_color_scale_buckets(scale_type = "lyl", col_name = "llpp_who_2021")
-#' df %>% add_aqli_color_scale_buckets(scale_type = "poldiff", col_name = "pm_example_pol_diff_col")
-#' df %>% add_aqli_color_scale_buckets(scale_type = "lyldiff", col_name = "llpp_example_lyl_diff_col")
 #'
 #' @return returns a data frame with an additional column (of class "character") that has the buckets
 #'         corresponding to the \code{scale_type} specified.
@@ -328,16 +315,13 @@ add_aqli_color_scale_buckets <- function(df, scale_type = "pollution", col_name)
 #' @importFrom stringr str_c
 #' @import ggplot2
 #' @import ggthemes
+#' @import magrittr
 #'
 #' @param df An AQLI dataframe that contains the columns that will be used to plot the histogram.
 #' @param scale_type This can take one of 2 values \code{"pollution"} or \code{"lyl"}.
 #' @param col_name The column name (in quotes) from \code{df} for which the histogram is to be plotted.
 #' @param region_name Plot subtitle (in quotes)
 #'
-#'
-#' @examples
-#' df %>% aqli_hist(scale_type = "pollution", col_name = "pm2021", region_name = "")
-#' df %>% aqli_hist(scale_type == "lyl", col_name = "llpp_who_2021", region_name = "Delhi")
 #'
 #' @return returns a histogram plot based on the specifications provided.
 #'
@@ -400,6 +384,7 @@ aqli_hist <- function(df, scale_type = "pollution", col_name = "pm2021", region_
 #' Plots pollution and life years lost regional bar graphs in AQLI colors.
 #'
 #' @import ggplot2
+#' @import magrittr
 #'
 #' @param df AQLI data that will be used to plot the bar graph.
 #' @param scale_type One of \code{pollution} or \code{lyl}. Depends on the underlying underlying value of \code{y_var} column  (from \code{df}) that is plotted.
@@ -416,14 +401,6 @@ aqli_hist <- function(df, scale_type = "pollution", col_name = "pm2021", region_
 #' @param legend_title Title for the legend of the bar graph.
 #' @param caption Caption for the bar graph.
 #'
-#' @examples
-#'
-#' # Plotting the graph of life years lost relative to WHO guideline (llpp_who_2021) for all prefectures (name_2) of a aqli gadm2 dataset
-#' # that is filtered for China.
-#'
-#' df %>%
-#' aqli_bar(scale_type = "lyl", x_var = "name_2", y_var = "llpp_who_2021", title = "", subtitle = "", x_label = "Prefecture", y_label = "Potential Gain in Life Expectancy (Years)", legend_title = "Potential gain in life expectancy (Years)", caption = "") +
-#'  theme(plot.background = element_rect(fill = "white", color = "white"))
 #'
 #' @note
 #' Please note that the aqli color buckets should already be added to \code{df} using \code{add_aqli_color_scale_buckets} function before it gets
@@ -489,6 +466,7 @@ aqli_bar <- function(df, scale_type = "pollution", x_var, y_var, title, subtitle
 #' @import ggplot2
 #' @import ggthemes
 #' @importFrom tidyr pivot_longer
+#' @import magrittr
 #'
 #' @param gadm2_file aqli gadm2 (district/county/prefecture level) master file.
 #' @param level one of \code{country}, \code{state} or \code{district}.
@@ -501,16 +479,6 @@ aqli_bar <- function(df, scale_type = "pollution", x_var, y_var, title, subtitle
 #' @param end_year year at which the trendline will end (defaults to 2021).
 #'
 #'
-#' @examples
-#'
-#' # this will produce a default trendlines plot for India from 1998 to 2021
-#' trendlines_aqli(gadm2_file)
-#'
-#' # this will produce a trendline for the state of Uttar Pradesh from the year 2003 to 2021
-#' trendlines_aqli(gadm2_file, level = "state", country_name = "India", state_name = "Uttar Pradesh", start_year = 2003, end_year = 2021)
-#'
-#' # this will produce a trendline for the district of Ghaziabad in the state of Uttar Pradesh in India from the year 2000 to 2021
-#' trendlines_aqli(gadm2_file, level = "state", country_name = "India", state_name = "Uttar Pradesh", district_name = "Ghaziabad", start_year = 2000, end_year = 2021)
 #'
 #' @return a trend lines plot from \code{start_year} to \code{end_year} for the region specificed at the level specified in \code{level}
 #'
@@ -627,16 +595,15 @@ trendlines_aqli <- function(gadm2_file, level = "country", country_name = "India
 #'
 #' @param gbd_master_data The GBD master dataset for all countries.
 #' @param country_name The name of the country to plot the GBD data for. Default is "India".
-#' @param top_or_bottom Specify whether to consider the most or least deadly threats. Default is "most".
+#' @param degree Specify whether to consider the most or least deadly threats. Default is "most", other option is "least".
 #' @param n_threats The number of most or least deadly threats to consider. Default is 10.
 #'
 #' @import dplyr
 #' @import ggplot2
 #' @importFrom ggthemes theme_tufte
 #' @importFrom forcats fct_reorder
+#' @import magrittr
 #'
-#' @examples
-#' plot_country_level_gbd(gbd_master_data, country_name = "India", degree = "most", n_threats = 10)
 #'
 #' @return A plot representing the GBD data for the specified country and threats.
 #'
@@ -646,11 +613,11 @@ plot_country_level_gbd <- function(gbd_master_data, country_name = "India", degr
 
   # filter GBD data to a particular country and to a given number of threats top or bottom
 
-  if(top_or_bottom == "most"){
+  if(degree == "most"){
     gbd_data_region <- gbd_results_master_2021 %>%
       filter(country == country_name) %>%
       slice_max(lyl, n = n_threats)
-  } else if (top_or_bottom == "least"){
+  } else if (degree == "least"){
     gbd_data_region <- gbd_results_master_2021 %>%
       filter(country == country_name) %>%
       slice_min(lyl, n = n_threats)
@@ -724,16 +691,15 @@ plot_country_level_gbd <- function(gbd_master_data, country_name = "India", degr
 #' @param state_name The name of the state (if applicable) for which to generate the map.
 #' @param district_name The name of the district (if applicable) for which to generate the map.
 #'
-#' @return A ggplot object displaying the map.
 #'
 #' @import ggplot2
 #' @import dplyr
 #' @import sf
 #' @import ggthemes
 #' @import forcats
+#' @import magrittr
 #'
-#' @examples
-#' plot_aqli_pol_lyl_map(gadm2_aqli_csv, gadm2_aqli_shapefile, gadm1_aqli_shapefile, gadm0_aqli_shapefile, "state", "llpp_who_2021", "lyl", "India", "Karnataka", NULL)
+#' @return A ggplot object displaying the map.
 #'
 #' @export
 plot_aqli_pol_lyl_map <- function(gadm2_aqli_csv, gadm2_aqli_shapefile, gadm1_aqli_shapefile, gadm0_aqli_shapefile, region_level, col_name_plt, plot_type, country_name, state_name, district_name){
@@ -980,127 +946,3 @@ plot_aqli_pol_lyl_map <- function(gadm2_aqli_csv, gadm2_aqli_shapefile, gadm1_aq
   }
 
 }
-
-
-#------------------------------------------------------------
-
-#' AQLI website map summary sentence cross-check function
-
-
-
-
-aqli_map_sentence_stats <- function(df, level = "global", data_type = "lyl", year1_col = "llpp_who_2021",
-                                    year2_col = "llpp_who_2014", country_name = "India",
-                                    state_name = "Uttar Pradesh", district_name = "Ghaziabad"){
-
-  # global----------
-  if(level == "global"){
-
-    if(data_type == "lyl"){
-      df %>%
-        mutate(pop_weights = population/sum(population, na.rm = TRUE),
-               lyl_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
-               lyl_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
-        summarise(avg_lyl_year1 = round(sum(lyl_year1_weighted, na.rm = TRUE), 2),
-                  avg_lyl_year2 = round(sum(lyl_year2_weighted, na.rm = TRUE), 2)) %>%
-        mutate(lyl_diff = avg_lyl_year1 - avg_lyl_year2)
-    } else if(data_type == "pol"){
-      df %>%
-        mutate(pop_weights = population/sum(population, na.rm = TRUE),
-               pm_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
-               pm_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
-        summarise(avg_pm_year1 = round(sum(pm_year1_weighted, na.rm = TRUE), 2),
-                  avg_pm_year2 = round(sum(pm_year2_weighted, na.rm = TRUE), 2)) %>%
-        mutate(perc_change = ((avg_pm_year1 - avg_pm_year2)/avg_pm_year2)*100)
-
-    }
-  } else if(level == "country"){
-
-    if(data_type == "lyl"){
-      df %>%
-        filter(country == country_name) %>%
-        mutate(pop_weights = population/sum(population, na.rm = TRUE),
-               lyl_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
-               lyl_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
-        summarise(avg_lyl_year1 = round(sum(lyl_year1_weighted, na.rm = TRUE), 2),
-                  avg_lyl_year2 = round(sum(lyl_year2_weighted, na.rm = TRUE), 2)) %>%
-        mutate(lyl_diff = avg_lyl_year1 - avg_lyl_year2)
-    } else if(data_type == "pol"){
-      df %>%
-        filter(country == country_name) %>%
-        mutate(pop_weights = population/sum(population, na.rm = TRUE),
-               pm_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
-               pm_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
-        summarise(avg_pm_year1 = round(sum(pm_year1_weighted, na.rm = TRUE), 2),
-                  avg_pm_year2 = round(sum(pm_year2_weighted, na.rm = TRUE), 2)) %>%
-        mutate(perc_change = ((avg_pm_year1 - avg_pm_year2)/avg_pm_year2)*100)
-
-    }
-
-  } else if(level == "state"){
-
-  if(data_type == "lyl"){
-    df %>%
-      filter(country == country_name, name_1 == state_name) %>%
-      mutate(pop_weights = population/sum(population, na.rm = TRUE),
-             lyl_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
-             lyl_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
-      summarise(avg_lyl_year1 = round(sum(lyl_year1_weighted, na.rm = TRUE), 2),
-                avg_lyl_year2 = round(sum(lyl_year2_weighted, na.rm = TRUE), 2)) %>%
-      mutate(lyl_diff = avg_lyl_year1 - avg_lyl_year2)
-} else if(data_type == "pol"){
-    df %>%
-      filter(country == country_name, name_1 == state_name) %>%
-      mutate(pop_weights = population/sum(population, na.rm = TRUE),
-             pm_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
-             pm_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
-    summarise(avg_pm_year1 = round(sum(pm_year1_weighted, na.rm = TRUE), 2),
-              avg_pm_year2 = round(sum(pm_year2_weighted, na.rm = TRUE), 2)) %>%
-    mutate(perc_change = ((avg_pm_year1 - avg_pm_year2)/avg_pm_year2)*100)
-
-
-}
-
-
-
-} else if(level == "district"){
-
-  if(data_type == "lyl"){
-    df %>%
-      filter(country == country_name, name_1 == state_name, name_2 == district_name) %>%
-      mutate(pop_weights = population/sum(population, na.rm = TRUE),
-             lyl_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
-             lyl_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
-      summarise(avg_lyl_year1 = round(sum(lyl_year1_weighted, na.rm = TRUE), 2),
-                avg_lyl_year2 = round(sum(lyl_year2_weighted, na.rm = TRUE), 2)) %>%
-      mutate(lyl_diff = avg_lyl_year1 - avg_lyl_year2)
-  } else if(data_type == "pol"){
-    df %>%
-      filter(country == country_name, name_1 == state_name, name_2 == district_name) %>%
-      mutate(pop_weights = population/sum(population, na.rm = TRUE),
-             pm_year1_weighted = pop_weights*(!!as.symbol(year1_col)),
-             pm_year2_weighted = pop_weights*(!!as.symbol(year2_col))) %>%
-      summarise(avg_pm_year1 = round(sum(pm_year1_weighted, na.rm = TRUE), 2),
-                avg_pm_year2 = round(sum(pm_year2_weighted, na.rm = TRUE), 2)) %>%
-      mutate(perc_change = ((avg_pm_year1 - avg_pm_year2)/avg_pm_year2)*100)
-
-  }
-
-
-}
-
-}
-
-
-
-
-
-#-------------------------------------------------------------
-
-#' percent of population in a given region, between x and y micrograms per cubic meter (upcoming)
-#'
-#'
-
-#-------------------------------------------------------------
-
-#'

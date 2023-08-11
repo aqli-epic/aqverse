@@ -10,9 +10,9 @@ add_aqli_color_scale_buckets(df, scale_type = "pollution", col_name)
 \item{df}{The dataframe to which the AQLI color scales will be added as a character column}
 
 \item{scale_type}{This is a parameter of type \code{character} and can take one of 4 values: (a) \code{lyl}: AQLI life years lost (single year);
-                  (b) \code{pollution}: AQLI pollution (in µg/m³, single year); (c) \code{lyldiff}:
+                  (b) \code{pollution}: AQLI pollution (in micrograms per cubic meter, single year); (c) \code{lyldiff}:
                   Life years lost scale (for difference between 2 years); (d) \code{poldiff}: pollution
-                  difference between 2 years scale (in %).
+                  difference between 2 years scale (in percent).
 
                   Note that, while plotting the actual map
                   that will use this function, make sure to add in the \code{fill} aesthetic of the mapping
@@ -35,11 +35,4 @@ Adds the buckets (mappping AQLI colors to the corresponding pollution or life ye
 value range buckets) as a column to the underlying dataset (depending on the underlying scale in use).
 The dataset should have a column that will be used for mapping colors to values.
 This function comes in handy while plotting graphs that need to be colored according to AQLI color scales.
-}
-\examples{
-df \%>\% add_aqli_color_scale_buckets(scale_type = "pollution", col_name = "pm2021")
-df \%>\% add_aqli_color_scale_buckets(scale_type = "lyl", col_name = "llpp_who_2021")
-df \%>\% add_aqli_color_scale_buckets(scale_type = "poldiff", col_name = "pm_example_pol_diff_col")
-df \%>\% add_aqli_color_scale_buckets(scale_type = "lyldiff", col_name = "llpp_example_lyl_diff_col")
-
 }

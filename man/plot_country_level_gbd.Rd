@@ -16,17 +16,13 @@ plot_country_level_gbd(
 
 \item{country_name}{The name of the country to plot the GBD data for. Default is "India".}
 
-\item{n_threats}{The number of most or least deadly threats to consider. Default is 10.}
+\item{degree}{Specify whether to consider the most or least deadly threats. Default is "most", other option is "least".}
 
-\item{top_or_bottom}{Specify whether to consider the most or least deadly threats. Default is "most".}
+\item{n_threats}{The number of most or least deadly threats to consider. Default is 10.}
 }
 \value{
 A plot representing the GBD data for the specified country and threats.
 }
 \description{
 Plots the GBD data for a specific country, filtering based on the number of most/least deadly threats to life expectancy.
-}
-\examples{
-plot_country_level_gbd(gbd_master_data, country_name = "India", degree = "most", n_threats = 10)
-
 }

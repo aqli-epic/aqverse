@@ -39,11 +39,3 @@ the collapsed data is needed and \code{perc_red_by} (percentage reduction by) to
 additional columns showing pollution levels and life years lost after a custom reduction are to be also c
 computed
 }
-\examples{
-gadm_level_summary(gadm2_aqli_2021, c("country"), c(2021), 10) # country (gadm0) level summary for the year 2021, with 10\% custom reduction column
-gadm_level_summary(gadm2_aqli_2021, c("country", "name_1"), c(2021), 10) # state (gadm1) level summary for the year 2021, with 10\% custom reduction column
-gadm_level_summary(gadm2_aqli_2021, c("continent"), c(2021), 10) # continent level summary for the year 2021, with 10\% custom reduction column
-gadm_level_summary(gadm2_aqli_2021, c("country", "name_1", "name_2"), c(2021), 10) # district (gadm0) level summary for the year 2021, with 10\% custom reduction column
-
-
-}

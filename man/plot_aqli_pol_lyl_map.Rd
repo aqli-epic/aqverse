@@ -47,7 +47,3 @@ and geographic shapefiles representing different administrative levels. It gener
 either the potential gain in life expectancy or air pollution levels (PM2.5) for a specific region
 (country, state, or district) based on the specified parameters.
 }
-\examples{
-plot_aqli_pol_lyl_map(gadm2_aqli_csv, gadm2_aqli_shapefile, gadm1_aqli_shapefile, gadm0_aqli_shapefile, "state", "llpp_who_2021", "lyl", "India", "Karnataka", NULL)
-
-}

@@ -38,15 +38,3 @@ a trend lines plot from \code{start_year} to \code{end_year} for the region spec
 Plots pollution trends at country, state and district levels
 from a given start year to a given end year
 }
-\examples{
-
-# this will produce a default trendlines plot for India from 1998 to 2021
-trendlines_aqli(gadm2_file)
-
-# this will produce a trendline for the state of Uttar Pradesh from the year 2003 to 2021
-trendlines_aqli(gadm2_file, level = "state", country_name = "India", state_name = "Uttar Pradesh", start_year = 2003, end_year = 2021)
-
-# this will produce a trendline for the district of Ghaziabad in the state of Uttar Pradesh in India from the year 2000 to 2021
-trendlines_aqli(gadm2_file, level = "state", country_name = "India", state_name = "Uttar Pradesh", district_name = "Ghaziabad", start_year = 2000, end_year = 2021)
-
-}

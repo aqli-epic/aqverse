@@ -19,9 +19,4 @@ when added to a plot, returns a plot with the AQLI plots base theme.
 \description{
 Adds a custom AQLI theme to plots in a single command
 }
-\examples{
-plot1 + themes_aqli_base
-mtcars \%>\% ggplot2::ggplot() + ggplot2::geom_histogram(mapping = ggplot2::aes(mpg)) + themes_aqli_base
-
-}
 \keyword{datasets}
