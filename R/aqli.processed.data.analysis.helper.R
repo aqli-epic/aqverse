@@ -328,7 +328,6 @@ add_aqli_color_scale_buckets <- function(df, scale_type = "pollution", col_name)
 #' @importFrom stringr str_c
 #' @import ggplot2
 #' @import ggthemes
-#' @importFrom aqverse add_aqli_color_scale_buckets themes_aqli_base
 #'
 #' @param df An AQLI dataframe that contains the columns that will be used to plot the histogram.
 #' @param scale_type This can take one of 2 values \code{"pollution"} or \code{"lyl"}.
@@ -401,7 +400,6 @@ aqli_hist <- function(df, scale_type = "pollution", col_name = "pm2021", region_
 #' Plots pollution and life years lost regional bar graphs in AQLI colors.
 #'
 #' @import ggplot2
-#' @importFrom aqverse add_aqli_color_scale_buckets themes_aqli_base
 #'
 #' @param df AQLI data that will be used to plot the bar graph.
 #' @param scale_type One of \code{pollution} or \code{lyl}. Depends on the underlying underlying value of \code{y_var} column  (from \code{df}) that is plotted.
@@ -491,8 +489,6 @@ aqli_bar <- function(df, scale_type = "pollution", x_var, y_var, title, subtitle
 #' @import ggplot2
 #' @import ggthemes
 #' @importFrom tidyr pivot_longer
-#' @importFrom aqverse themes_aqli_base
-
 #'
 #' @param gadm2_file aqli gadm2 (district/county/prefecture level) master file.
 #' @param level one of \code{country}, \code{state} or \code{district}.
@@ -638,7 +634,6 @@ trendlines_aqli <- function(gadm2_file, level = "country", country_name = "India
 #' @import ggplot2
 #' @importFrom ggthemes theme_tufte
 #' @importFrom forcats fct_reorder
-#' @importFrom aqverse add_aqli_color_scale_buckets themes_aqli_base
 #'
 #' @examples
 #' plot_country_level_gbd(gbd_master_data, country_name = "India", degree = "most", n_threats = 10)
