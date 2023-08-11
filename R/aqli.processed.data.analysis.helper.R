@@ -16,7 +16,7 @@
 #' computed
 #'
 #'
-#' @importFrom stringr str_c
+#' @import stringr
 #' @import dplyr
 #' @import magrittr
 #'
@@ -36,7 +36,7 @@
 #'               The 2023 AQLI dataset provides data on the following years 1998 to 2021.
 #'
 #' @param perc_red_by custom reduction percentage (numeric), i.e. if columns for custom reduction are needed. For example, if we want to see
-#'                    pollution (and corresponding lyl) columns for a 10% reduction relative to the years specified, then this
+#'                    pollution (and corresponding lyl) columns for a 10 percent reduction relative to the years specified, then this
 #'                    parameter would be 10.
 #'
 #'
@@ -157,7 +157,6 @@ gadm_level_summary <- function(df, level_col_name_vec, years, perc_red_by){
 #' @import ggplot2
 #' @importFrom ggthemes theme_tufte
 #'
-#' @param "" no parameters needed. See examples for usage.
 #'
 #'
 #' @return when added to a plot, returns a plot with the AQLI plots base theme.
@@ -166,15 +165,15 @@ gadm_level_summary <- function(df, level_col_name_vec, years, perc_red_by){
 #' @export
 themes_aqli_base <- ggthemes::theme_tufte() +
   ggplot2::theme(plot.title = element_text(size = 18, hjust = 0.5, margin = margin(b = 0.2, unit = "cm")),
-        plot.subtitle = element_text(size = 14, hjust = 0.5, margin = margin(b = 0.7, unit = "cm")),
-        axis.title.x = element_text(size = 14, margin = margin(t = 0.3, b = 0.5, unit = "cm")),
-        axis.title.y = element_text(size = 14, margin = margin(r = 0.3, unit = "cm")),
-        axis.text = element_text(size = 13),
-        plot.caption = element_text(size = 10, hjust = 0, margin = margin(t = 0.7, unit = "cm"), face = "italic"),
-        legend.box.background = element_rect(color = "black"),
-        legend.title = element_text(size = 14),
-        legend.text = element_text(size = 13),
-        legend.position = "bottom")
+                 plot.subtitle = element_text(size = 14, hjust = 0.5, margin = margin(b = 0.7, unit = "cm")),
+                 axis.title.x = element_text(size = 14, margin = margin(t = 0.3, b = 0.5, unit = "cm")),
+                 axis.title.y = element_text(size = 14, margin = margin(r = 0.3, unit = "cm")),
+                 axis.text = element_text(size = 13),
+                 plot.caption = element_text(size = 10, hjust = 0, margin = margin(t = 0.7, unit = "cm"), face = "italic"),
+                 legend.box.background = element_rect(color = "black"),
+                 legend.title = element_text(size = 14),
+                 legend.text = element_text(size = 13),
+                 legend.position = "bottom")
 
 
 #-----------------------------------------------------
@@ -187,7 +186,7 @@ themes_aqli_base <- ggthemes::theme_tufte() +
 #' The dataset should have a column that will be used for mapping colors to values.
 #' This function comes in handy while plotting graphs that need to be colored according to AQLI color scales.
 #'
-#' @importFrom dplyr mutate
+#' @import dplyr
 #' @import magrittr
 #'
 #' @param df The dataframe to which the AQLI color scales will be added as a character column
@@ -220,87 +219,87 @@ add_aqli_color_scale_buckets <- function(df, scale_type = "pollution", col_name)
   if(scale_type == "lyl"){
     df %>%
       dplyr::mutate(lyl_bucket = ifelse((!!as.symbol(col_name) >= 0) & (!!as.symbol(col_name) < 0.1), "0 to < 0.1", NA),
-             lyl_bucket = ifelse((!!as.symbol(col_name) >= 0.1) & (!!as.symbol(col_name) < 0.5), "0.1 to < 0.5", lyl_bucket),
-             lyl_bucket = ifelse((!!as.symbol(col_name) >= 0.5) & (!!as.symbol(col_name) < 1), "0.5 to < 1", lyl_bucket),
-             lyl_bucket = ifelse((!!as.symbol(col_name) >= 1) & (!!as.symbol(col_name) < 2), "1 to < 2", lyl_bucket),
-             lyl_bucket = ifelse((!!as.symbol(col_name) >= 2) & (!!as.symbol(col_name) < 3), "2 to < 3", lyl_bucket),
-             lyl_bucket = ifelse((!!as.symbol(col_name) >= 3) & (!!as.symbol(col_name) < 4), "3 to < 4", lyl_bucket),
-             lyl_bucket = ifelse((!!as.symbol(col_name) >= 4) & (!!as.symbol(col_name) < 5), "4 to < 5", lyl_bucket),
-             lyl_bucket = ifelse((!!as.symbol(col_name) >= 5) & (!!as.symbol(col_name) < 6), "5 to < 6", lyl_bucket),
-             lyl_bucket = ifelse((!!as.symbol(col_name) >= 6), ">= 6", lyl_bucket)) %>%
+                    lyl_bucket = ifelse((!!as.symbol(col_name) >= 0.1) & (!!as.symbol(col_name) < 0.5), "0.1 to < 0.5", lyl_bucket),
+                    lyl_bucket = ifelse((!!as.symbol(col_name) >= 0.5) & (!!as.symbol(col_name) < 1), "0.5 to < 1", lyl_bucket),
+                    lyl_bucket = ifelse((!!as.symbol(col_name) >= 1) & (!!as.symbol(col_name) < 2), "1 to < 2", lyl_bucket),
+                    lyl_bucket = ifelse((!!as.symbol(col_name) >= 2) & (!!as.symbol(col_name) < 3), "2 to < 3", lyl_bucket),
+                    lyl_bucket = ifelse((!!as.symbol(col_name) >= 3) & (!!as.symbol(col_name) < 4), "3 to < 4", lyl_bucket),
+                    lyl_bucket = ifelse((!!as.symbol(col_name) >= 4) & (!!as.symbol(col_name) < 5), "4 to < 5", lyl_bucket),
+                    lyl_bucket = ifelse((!!as.symbol(col_name) >= 5) & (!!as.symbol(col_name) < 6), "5 to < 6", lyl_bucket),
+                    lyl_bucket = ifelse((!!as.symbol(col_name) >= 6), ">= 6", lyl_bucket)) %>%
       dplyr::mutate(order_lyl_bucket = ifelse(lyl_bucket == "0 to < 0.1", 1, NA),
-             order_lyl_bucket = ifelse(lyl_bucket == "0.1 to < 0.5", 2, order_lyl_bucket),
-             order_lyl_bucket = ifelse(lyl_bucket == "0.5 to < 1", 3, order_lyl_bucket),
-             order_lyl_bucket = ifelse(lyl_bucket == "1 to < 2", 4, order_lyl_bucket),
-             order_lyl_bucket = ifelse(lyl_bucket == "2 to < 3", 5, order_lyl_bucket),
-             order_lyl_bucket = ifelse(lyl_bucket == "3 to < 4", 6, order_lyl_bucket),
-             order_lyl_bucket = ifelse(lyl_bucket == "4 to < 5", 7, order_lyl_bucket),
-             order_lyl_bucket = ifelse(lyl_bucket == "5 to < 6", 8, order_lyl_bucket),
-             order_lyl_bucket = ifelse(lyl_bucket == ">= 6", 9, order_lyl_bucket))
+                    order_lyl_bucket = ifelse(lyl_bucket == "0.1 to < 0.5", 2, order_lyl_bucket),
+                    order_lyl_bucket = ifelse(lyl_bucket == "0.5 to < 1", 3, order_lyl_bucket),
+                    order_lyl_bucket = ifelse(lyl_bucket == "1 to < 2", 4, order_lyl_bucket),
+                    order_lyl_bucket = ifelse(lyl_bucket == "2 to < 3", 5, order_lyl_bucket),
+                    order_lyl_bucket = ifelse(lyl_bucket == "3 to < 4", 6, order_lyl_bucket),
+                    order_lyl_bucket = ifelse(lyl_bucket == "4 to < 5", 7, order_lyl_bucket),
+                    order_lyl_bucket = ifelse(lyl_bucket == "5 to < 6", 8, order_lyl_bucket),
+                    order_lyl_bucket = ifelse(lyl_bucket == ">= 6", 9, order_lyl_bucket))
 
     # pollution (single year) scale
   } else if (scale_type == "pollution") {
     df %>%
       dplyr::mutate(pol_bucket = ifelse((!!as.symbol(col_name) >= 0) & (!!as.symbol(col_name) < 5), "0 to < 5", NA),
-             pol_bucket = ifelse((!!as.symbol(col_name) >= 5) & (!!as.symbol(col_name) < 10), "5 to < 10", pol_bucket),
-             pol_bucket = ifelse((!!as.symbol(col_name) >= 10) & (!!as.symbol(col_name) < 20), "10 to < 20", pol_bucket),
-             pol_bucket = ifelse((!!as.symbol(col_name) >= 20) & (!!as.symbol(col_name) < 30), "20 to < 30", pol_bucket),
-             pol_bucket = ifelse((!!as.symbol(col_name) >= 30) & (!!as.symbol(col_name) < 40), "30 to < 40", pol_bucket),
-             pol_bucket = ifelse((!!as.symbol(col_name) >= 40) & (!!as.symbol(col_name) < 50), "40 to < 50", pol_bucket),
-             pol_bucket = ifelse((!!as.symbol(col_name) >= 50) & (!!as.symbol(col_name) < 60), "50 to < 60", pol_bucket),
-             pol_bucket = ifelse((!!as.symbol(col_name) >= 60) & (!!as.symbol(col_name) < 70), "60 to < 70", pol_bucket),
-             pol_bucket = ifelse((!!as.symbol(col_name) >= 70), ">= 70", pol_bucket)) %>%
+                    pol_bucket = ifelse((!!as.symbol(col_name) >= 5) & (!!as.symbol(col_name) < 10), "5 to < 10", pol_bucket),
+                    pol_bucket = ifelse((!!as.symbol(col_name) >= 10) & (!!as.symbol(col_name) < 20), "10 to < 20", pol_bucket),
+                    pol_bucket = ifelse((!!as.symbol(col_name) >= 20) & (!!as.symbol(col_name) < 30), "20 to < 30", pol_bucket),
+                    pol_bucket = ifelse((!!as.symbol(col_name) >= 30) & (!!as.symbol(col_name) < 40), "30 to < 40", pol_bucket),
+                    pol_bucket = ifelse((!!as.symbol(col_name) >= 40) & (!!as.symbol(col_name) < 50), "40 to < 50", pol_bucket),
+                    pol_bucket = ifelse((!!as.symbol(col_name) >= 50) & (!!as.symbol(col_name) < 60), "50 to < 60", pol_bucket),
+                    pol_bucket = ifelse((!!as.symbol(col_name) >= 60) & (!!as.symbol(col_name) < 70), "60 to < 70", pol_bucket),
+                    pol_bucket = ifelse((!!as.symbol(col_name) >= 70), ">= 70", pol_bucket)) %>%
       dplyr::mutate(order_pol_bucket = ifelse(pol_bucket == "0 to < 5", 1, NA),
-             order_pol_bucket = ifelse(pol_bucket == "5 to < 10", 2, order_pol_bucket),
-             order_pol_bucket = ifelse(pol_bucket == "10 to < 20", 3, order_pol_bucket),
-             order_pol_bucket = ifelse(pol_bucket == "20 to < 30", 4, order_pol_bucket),
-             order_pol_bucket = ifelse(pol_bucket == "30 to < 40", 5, order_pol_bucket),
-             order_pol_bucket = ifelse(pol_bucket == "40 to < 50", 6, order_pol_bucket),
-             order_pol_bucket = ifelse(pol_bucket == "50 to < 60", 7, order_pol_bucket),
-             order_pol_bucket = ifelse(pol_bucket == "60 to < 70", 8, order_pol_bucket),
-             order_pol_bucket = ifelse(pol_bucket == ">= 70", 9, order_pol_bucket))
+                    order_pol_bucket = ifelse(pol_bucket == "5 to < 10", 2, order_pol_bucket),
+                    order_pol_bucket = ifelse(pol_bucket == "10 to < 20", 3, order_pol_bucket),
+                    order_pol_bucket = ifelse(pol_bucket == "20 to < 30", 4, order_pol_bucket),
+                    order_pol_bucket = ifelse(pol_bucket == "30 to < 40", 5, order_pol_bucket),
+                    order_pol_bucket = ifelse(pol_bucket == "40 to < 50", 6, order_pol_bucket),
+                    order_pol_bucket = ifelse(pol_bucket == "50 to < 60", 7, order_pol_bucket),
+                    order_pol_bucket = ifelse(pol_bucket == "60 to < 70", 8, order_pol_bucket),
+                    order_pol_bucket = ifelse(pol_bucket == ">= 70", 9, order_pol_bucket))
 
     # life years lost (difference between 2 years) scale
   } else if (scale_type == "lyldiff"){
 
     df %>%
       dplyr::mutate(lyldiff_bucket = ifelse((!!as.symbol(col_name) < -2), "< -2", NA),
-             lyldiff_bucket = ifelse((!!as.symbol(col_name) >= -2) & (!!as.symbol(col_name) < -0.5), "-2 to (< -0.5)", lyldiff_bucket),
-             lyldiff_bucket = ifelse((!!as.symbol(col_name) >= -0.5) & (!!as.symbol(col_name) < -0.1), "-0.5 to (< -0.1)", lyldiff_bucket),
-             lyldiff_bucket = ifelse((!!as.symbol(col_name) >= -0.1) & (!!as.symbol(col_name) < 0), "-0.1 to (< 0)", lyldiff_bucket),
-             lyldiff_bucket = ifelse((!!as.symbol(col_name) >= 0) & (!!as.symbol(col_name) < 0.1), "0 to (< 0.1)", lyldiff_bucket),
-             lyldiff_bucket = ifelse((!!as.symbol(col_name) >= 0.1) & (!!as.symbol(col_name) < 0.5), "0.1 to (< 0.5)", lyldiff_bucket),
-             lyldiff_bucket = ifelse((!!as.symbol(col_name) >= 0.5) & (!!as.symbol(col_name) < 2), "0.5 to (< 2)", lyldiff_bucket),
-             lyldiff_bucket = ifelse((!!as.symbol(col_name) >= 2), ">= 2", lyldiff_bucket)) %>%
+                    lyldiff_bucket = ifelse((!!as.symbol(col_name) >= -2) & (!!as.symbol(col_name) < -0.5), "-2 to (< -0.5)", lyldiff_bucket),
+                    lyldiff_bucket = ifelse((!!as.symbol(col_name) >= -0.5) & (!!as.symbol(col_name) < -0.1), "-0.5 to (< -0.1)", lyldiff_bucket),
+                    lyldiff_bucket = ifelse((!!as.symbol(col_name) >= -0.1) & (!!as.symbol(col_name) < 0), "-0.1 to (< 0)", lyldiff_bucket),
+                    lyldiff_bucket = ifelse((!!as.symbol(col_name) >= 0) & (!!as.symbol(col_name) < 0.1), "0 to (< 0.1)", lyldiff_bucket),
+                    lyldiff_bucket = ifelse((!!as.symbol(col_name) >= 0.1) & (!!as.symbol(col_name) < 0.5), "0.1 to (< 0.5)", lyldiff_bucket),
+                    lyldiff_bucket = ifelse((!!as.symbol(col_name) >= 0.5) & (!!as.symbol(col_name) < 2), "0.5 to (< 2)", lyldiff_bucket),
+                    lyldiff_bucket = ifelse((!!as.symbol(col_name) >= 2), ">= 2", lyldiff_bucket)) %>%
       dplyr::mutate(order_lyldiff_bucket = ifelse(lyldiff_bucket == "< -2", 1, NA),
-             order_lyldiff_bucket = ifelse(lyldiff_bucket == "-2 to (< -0.5)", 2, order_lyldiff_bucket),
-             order_lyldiff_bucket = ifelse(lyldiff_bucket == "-0.5 to (< -0.1)", 3, order_lyldiff_bucket),
-             order_lyldiff_bucket = ifelse(lyldiff_bucket == "-0.1 to (< 0)", 4, order_lyldiff_bucket),
-             order_lyldiff_bucket = ifelse(lyldiff_bucket == "0 to (< 0.1)", 5, order_lyldiff_bucket),
-             order_lyldiff_bucket = ifelse(lyldiff_bucket == "0.1 to (< 0.5)", 6, order_lyldiff_bucket),
-             order_lyldiff_bucket = ifelse(lyldiff_bucket == "0.5 to (< 2)", 7, order_lyldiff_bucket),
-             order_lyldiff_bucket = ifelse(lyldiff_bucket == ">= 2", 8, order_lyldiff_bucket))
+                    order_lyldiff_bucket = ifelse(lyldiff_bucket == "-2 to (< -0.5)", 2, order_lyldiff_bucket),
+                    order_lyldiff_bucket = ifelse(lyldiff_bucket == "-0.5 to (< -0.1)", 3, order_lyldiff_bucket),
+                    order_lyldiff_bucket = ifelse(lyldiff_bucket == "-0.1 to (< 0)", 4, order_lyldiff_bucket),
+                    order_lyldiff_bucket = ifelse(lyldiff_bucket == "0 to (< 0.1)", 5, order_lyldiff_bucket),
+                    order_lyldiff_bucket = ifelse(lyldiff_bucket == "0.1 to (< 0.5)", 6, order_lyldiff_bucket),
+                    order_lyldiff_bucket = ifelse(lyldiff_bucket == "0.5 to (< 2)", 7, order_lyldiff_bucket),
+                    order_lyldiff_bucket = ifelse(lyldiff_bucket == ">= 2", 8, order_lyldiff_bucket))
 
     # pollutuon (difference in % between 2 years) scale
   } else if (scale_type == "poldiff"){
 
     df %>%
       dplyr::mutate(poldiff_bucket = ifelse((!!as.symbol(col_name) < -10), "< -10", NA),
-             poldiff_bucket = ifelse((!!as.symbol(col_name) >= -10) & (!!as.symbol(col_name) < -5), "-10 to (< -5)", poldiff_bucket),
-             poldiff_bucket = ifelse((!!as.symbol(col_name) >= -5) & (!!as.symbol(col_name) < -1), "-5 to (< -1)", poldiff_bucket),
-             poldiff_bucket = ifelse((!!as.symbol(col_name) >= -1) & (!!as.symbol(col_name) < 0), "-1 to (< 0)", poldiff_bucket),
-             poldiff_bucket = ifelse((!!as.symbol(col_name) >= 0) & (!!as.symbol(col_name) < 1), "0 to (< 1)", poldiff_bucket),
-             poldiff_bucket = ifelse((!!as.symbol(col_name) >= 1) & (!!as.symbol(col_name) < 5), "1 to (< 5)", poldiff_bucket),
-             poldiff_bucket = ifelse((!!as.symbol(col_name) >= 5) & (!!as.symbol(col_name) < 10), "5 to (< 10)", poldiff_bucket),
-             poldiff_bucket = ifelse((!!as.symbol(col_name) >= 10), ">= 10", poldiff_bucket)) %>%
+                    poldiff_bucket = ifelse((!!as.symbol(col_name) >= -10) & (!!as.symbol(col_name) < -5), "-10 to (< -5)", poldiff_bucket),
+                    poldiff_bucket = ifelse((!!as.symbol(col_name) >= -5) & (!!as.symbol(col_name) < -1), "-5 to (< -1)", poldiff_bucket),
+                    poldiff_bucket = ifelse((!!as.symbol(col_name) >= -1) & (!!as.symbol(col_name) < 0), "-1 to (< 0)", poldiff_bucket),
+                    poldiff_bucket = ifelse((!!as.symbol(col_name) >= 0) & (!!as.symbol(col_name) < 1), "0 to (< 1)", poldiff_bucket),
+                    poldiff_bucket = ifelse((!!as.symbol(col_name) >= 1) & (!!as.symbol(col_name) < 5), "1 to (< 5)", poldiff_bucket),
+                    poldiff_bucket = ifelse((!!as.symbol(col_name) >= 5) & (!!as.symbol(col_name) < 10), "5 to (< 10)", poldiff_bucket),
+                    poldiff_bucket = ifelse((!!as.symbol(col_name) >= 10), ">= 10", poldiff_bucket)) %>%
       dplyr::mutate(order_poldiff_bucket = ifelse(poldiff_bucket == "< -10", 1, NA),
-             order_poldiff_bucket = ifelse(poldiff_bucket == "-10 to (< -5)", 2, order_poldiff_bucket),
-             order_poldiff_bucket = ifelse(poldiff_bucket == "-5 to (< -1)", 3, order_poldiff_bucket),
-             order_poldiff_bucket = ifelse(poldiff_bucket == "-1 to (< 0)", 4, order_poldiff_bucket),
-             order_poldiff_bucket = ifelse(poldiff_bucket == "0 to (< 1)", 5, order_poldiff_bucket),
-             order_poldiff_bucket = ifelse(poldiff_bucket == "1 to (< 5)", 6, order_poldiff_bucket),
-             order_poldiff_bucket = ifelse(poldiff_bucket == "5 to (< 10)", 7, order_poldiff_bucket),
-             order_poldiff_bucket = ifelse(poldiff_bucket == ">= 10", 8, order_poldiff_bucket))
+                    order_poldiff_bucket = ifelse(poldiff_bucket == "-10 to (< -5)", 2, order_poldiff_bucket),
+                    order_poldiff_bucket = ifelse(poldiff_bucket == "-5 to (< -1)", 3, order_poldiff_bucket),
+                    order_poldiff_bucket = ifelse(poldiff_bucket == "-1 to (< 0)", 4, order_poldiff_bucket),
+                    order_poldiff_bucket = ifelse(poldiff_bucket == "0 to (< 1)", 5, order_poldiff_bucket),
+                    order_poldiff_bucket = ifelse(poldiff_bucket == "1 to (< 5)", 6, order_poldiff_bucket),
+                    order_poldiff_bucket = ifelse(poldiff_bucket == "5 to (< 10)", 7, order_poldiff_bucket),
+                    order_poldiff_bucket = ifelse(poldiff_bucket == ">= 10", 8, order_poldiff_bucket))
 
   }
 
@@ -312,7 +311,7 @@ add_aqli_color_scale_buckets <- function(df, scale_type = "pollution", col_name)
 #'
 #' Plots a histogram of either pollution or life years lost values in AQLI color scale
 #'
-#' @importFrom stringr str_c
+#' @import stringr
 #' @import ggplot2
 #' @import ggthemes
 #' @import magrittr
@@ -333,12 +332,12 @@ add_aqli_color_scale_buckets <- function(df, scale_type = "pollution", col_name)
 aqli_hist <- function(df, scale_type = "pollution", col_name = "pm2021", region_name = "enter region name"){
   if(scale_type == "pollution"){
     pol_year <- as.numeric(str_remove(col_name, "pm"))
-    x_axis_title <- str_c("Annual average PM2.5 in ", pol_year, "(µg/m³)")
+    x_axis_title <- str_c("Annual average PM2.5 in ", pol_year, "(", "\u03BCg/m\u00B3", ")")
     y_axis_title <- "Number of people"
     plot_title <- str_c("Distribution of Annual Average PM2.5 pollution in", pol_year)
     plot_subtitle <- region_name
     plot_caption <- "*AQLI only reports satellite derived annual average PM2.5 data"
-    legend_title <- "PM2.5 (in µg/m³)"
+    legend_title <- "PM2.5 (in \u03BCg/m\u00B3)"
     plt <- df %>%
       add_aqli_color_scale_buckets(scale_type = "pollution", col_name = col_name) %>%
       ggplot() +
@@ -512,7 +511,7 @@ trendlines_aqli <- function(gadm2_file, level = "country", country_name = "India
       # scale_y_continuous(breaks = seq(0, max(trendlines_aqli_data$pop_weighted_avg_pm2.5), 10)) +
       ggthemes::theme_hc() +
       ggplot2::labs(x = "Years",
-                    y = "Annual Average PM2.5 concentration (in µg/m3)") +
+                    y = "Annual Average PM2.5 concentration (in  \u03BCg/m\u00B3)") +
       ggplot2::theme(legend.position = "bottom", legend.title = element_blank(),
                      legend.text = element_text(size = 7),
                      axis.title.y = element_text(size = 9),
@@ -542,7 +541,7 @@ trendlines_aqli <- function(gadm2_file, level = "country", country_name = "India
       # scale_y_continuous(breaks = seq(0, max(trendlines_aqli_data$pop_weighted_avg_pm2.5), 10)) +
       ggthemes::theme_hc() +
       ggplot2::labs(x = "Years",
-                    y = "Annual Average PM2.5 concentration (in µg/m3)") +
+                    y = "Annual Average PM2.5 concentration (in  \u03BCg/m\u00B3)") +
       ggplot2::theme(legend.position = "bottom", legend.title = element_blank(),
                      legend.text = element_text(size = 7),
                      axis.title.y = element_text(size = 9),
@@ -571,7 +570,7 @@ trendlines_aqli <- function(gadm2_file, level = "country", country_name = "India
       # scale_y_continuous(breaks = seq(0, max(trendlines_aqli_data$pop_weighted_avg_pm2.5), 10)) +
       ggthemes::theme_hc() +
       ggplot2::labs(x = "Years",
-                    y = "Annual Average PM2.5 concentration (in µg/m3)") +
+                    y = "Annual Average PM2.5 concentration (in  \u03BCg/m\u00B3)") +
       ggplot2::theme(legend.position = "bottom", legend.title = element_blank(),
                      legend.text = element_text(size = 7),
                      axis.title.y = element_text(size = 9),
@@ -723,225 +722,225 @@ plot_aqli_pol_lyl_map <- function(gadm2_aqli_csv, gadm2_aqli_shapefile, gadm1_aq
 
   #-----------------------------------lyl-----------------------------------#
   if(plot_type == "lyl"){
-   map_data <- map_data %>%
+    map_data <- map_data %>%
       add_aqli_color_scale_buckets("lyl", col_name_plt) %>%
       select(-geometry, geometry) %>%
       st_as_sf()
-   if(region_level == "country"){
-     plt <- map_data %>%
-     ggplot() +
-       geom_sf(mapping = aes(fill = forcats::fct_reorder(lyl_bucket, order_lyl_bucket)), color = "lightgrey", lwd = 0.05) +
-       geom_sf(data = gadm1_aqli_shapefile %>% filter(name0 == country_name), color = "black", fill = "transparent", lwd = 0.5) +
-       ggthemes::theme_map() +
-       scale_fill_manual(values = c("0 to < 0.1" = "#ffffff",
-                                    "0.1 to < 0.5" = "#ffeda0",
-                                    "0.5 to < 1" = "#fed976",
-                                    "1 to < 2" = "#feb24c",
-                                    "2 to < 3" = "#fd8d3c",
-                                    "3 to < 4" = "#fc4e2a",
-                                    "4 to < 5" = "#e31a1c",
-                                    "5 to < 6" = "#bd0026",
-                                    ">= 6" = "#800026")) +
-       ggthemes::theme_map() +
-       labs(fill = "Potential gain in life expectancy (Years) ", title = "") +
-       theme(legend.position = "bottom",
-             legend.justification = c(0.5, 3),
-             legend.background = element_rect(color = "black"),
-             legend.text = element_text(size = 14),
-             legend.title = element_text(size = 15),
-             plot.title = element_text(hjust = 0.5, size = 15),
-             # legend.key = element_rect(color = "black"),
-             legend.box.margin = margin(b = 1, unit = "cm"),
-             plot.subtitle = element_text(hjust = 0.5, size = 7),
-             plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
-             legend.key = element_rect(color = "black"),
-             legend.box.spacing = unit(0, "cm"),
-             legend.direction = "horizontal",
-             plot.background = element_rect(fill = "white", color = "white")) +
-       guides(fill = guide_legend(nrow = 1))
+    if(region_level == "country"){
+      plt <- map_data %>%
+        ggplot() +
+        geom_sf(mapping = aes(fill = forcats::fct_reorder(lyl_bucket, order_lyl_bucket)), color = "lightgrey", lwd = 0.05) +
+        geom_sf(data = gadm1_aqli_shapefile %>% filter(name0 == country_name), color = "black", fill = "transparent", lwd = 0.5) +
+        ggthemes::theme_map() +
+        scale_fill_manual(values = c("0 to < 0.1" = "#ffffff",
+                                     "0.1 to < 0.5" = "#ffeda0",
+                                     "0.5 to < 1" = "#fed976",
+                                     "1 to < 2" = "#feb24c",
+                                     "2 to < 3" = "#fd8d3c",
+                                     "3 to < 4" = "#fc4e2a",
+                                     "4 to < 5" = "#e31a1c",
+                                     "5 to < 6" = "#bd0026",
+                                     ">= 6" = "#800026")) +
+        ggthemes::theme_map() +
+        labs(fill = "Potential gain in life expectancy (Years) ", title = "") +
+        theme(legend.position = "bottom",
+              legend.justification = c(0.5, 3),
+              legend.background = element_rect(color = "black"),
+              legend.text = element_text(size = 14),
+              legend.title = element_text(size = 15),
+              plot.title = element_text(hjust = 0.5, size = 15),
+              # legend.key = element_rect(color = "black"),
+              legend.box.margin = margin(b = 1, unit = "cm"),
+              plot.subtitle = element_text(hjust = 0.5, size = 7),
+              plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
+              legend.key = element_rect(color = "black"),
+              legend.box.spacing = unit(0, "cm"),
+              legend.direction = "horizontal",
+              plot.background = element_rect(fill = "white", color = "white")) +
+        guides(fill = guide_legend(nrow = 1))
 
-     return(plt)
-   } else if (region_level == "state"){
-    plt <-  map_data %>%
-       ggplot() +
-       geom_sf(mapping = aes(fill = forcats::fct_reorder(lyl_bucket, order_lyl_bucket)), color = "lightgrey", lwd = 0.05) +
-       geom_sf(data = gadm1_aqli_shapefile %>% filter(name0 == country_name, name1  == state_name), color = "black", fill = "transparent", lwd = 0.5) +
-       ggthemes::theme_map() +
-       scale_fill_manual(values = c("0 to < 0.1" = "#ffffff",
-                                    "0.1 to < 0.5" = "#ffeda0",
-                                    "0.5 to < 1" = "#fed976",
-                                    "1 to < 2" = "#feb24c",
-                                    "2 to < 3" = "#fd8d3c",
-                                    "3 to < 4" = "#fc4e2a",
-                                    "4 to < 5" = "#e31a1c",
-                                    "5 to < 6" = "#bd0026",
-                                    ">= 6" = "#800026")) +
-       ggthemes::theme_map() +
-       labs(fill = "Potential gain in life expectancy (Years) ", title = "") +
-       theme(legend.position = "bottom",
-             legend.justification = c(0.5, 3),
-             legend.background = element_rect(color = "black"),
-             legend.text = element_text(size = 14),
-             legend.title = element_text(size = 15),
-             plot.title = element_text(hjust = 0.5, size = 15),
-             # legend.key = element_rect(color = "black"),
-             legend.box.margin = margin(b = 1, unit = "cm"),
-             plot.subtitle = element_text(hjust = 0.5, size = 7),
-             plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
-             legend.key = element_rect(color = "black"),
-             legend.box.spacing = unit(0, "cm"),
-             legend.direction = "horizontal",
-             plot.background = element_rect(fill = "white", color = "white")) +
-       guides(fill = guide_legend(nrow = 1))
+      return(plt)
+    } else if (region_level == "state"){
+      plt <-  map_data %>%
+        ggplot() +
+        geom_sf(mapping = aes(fill = forcats::fct_reorder(lyl_bucket, order_lyl_bucket)), color = "lightgrey", lwd = 0.05) +
+        geom_sf(data = gadm1_aqli_shapefile %>% filter(name0 == country_name, name1  == state_name), color = "black", fill = "transparent", lwd = 0.5) +
+        ggthemes::theme_map() +
+        scale_fill_manual(values = c("0 to < 0.1" = "#ffffff",
+                                     "0.1 to < 0.5" = "#ffeda0",
+                                     "0.5 to < 1" = "#fed976",
+                                     "1 to < 2" = "#feb24c",
+                                     "2 to < 3" = "#fd8d3c",
+                                     "3 to < 4" = "#fc4e2a",
+                                     "4 to < 5" = "#e31a1c",
+                                     "5 to < 6" = "#bd0026",
+                                     ">= 6" = "#800026")) +
+        ggthemes::theme_map() +
+        labs(fill = "Potential gain in life expectancy (Years) ", title = "") +
+        theme(legend.position = "bottom",
+              legend.justification = c(0.5, 3),
+              legend.background = element_rect(color = "black"),
+              legend.text = element_text(size = 14),
+              legend.title = element_text(size = 15),
+              plot.title = element_text(hjust = 0.5, size = 15),
+              # legend.key = element_rect(color = "black"),
+              legend.box.margin = margin(b = 1, unit = "cm"),
+              plot.subtitle = element_text(hjust = 0.5, size = 7),
+              plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
+              legend.key = element_rect(color = "black"),
+              legend.box.spacing = unit(0, "cm"),
+              legend.direction = "horizontal",
+              plot.background = element_rect(fill = "white", color = "white")) +
+        guides(fill = guide_legend(nrow = 1))
 
-    return(plt)
+      return(plt)
 
-   } else if (region_level == "district"){
-    plt <- map_data %>%
-       ggplot() +
-       geom_sf(mapping = aes(fill = forcats::fct_reorder(lyl_bucket, order_lyl_bucket)), color = "lightgrey", lwd = 0.05) +
-       ggthemes::theme_map() +
-       scale_fill_manual(values = c("0 to < 0.1" = "#ffffff",
-                                    "0.1 to < 0.5" = "#ffeda0",
-                                    "0.5 to < 1" = "#fed976",
-                                    "1 to < 2" = "#feb24c",
-                                    "2 to < 3" = "#fd8d3c",
-                                    "3 to < 4" = "#fc4e2a",
-                                    "4 to < 5" = "#e31a1c",
-                                    "5 to < 6" = "#bd0026",
-                                    ">= 6" = "#800026")) +
-       ggthemes::theme_map() +
-       labs(fill = "Potential gain in life expectancy (Years) ", title = "") +
-       theme(legend.position = "bottom",
-             legend.justification = c(0.5, 3),
-             legend.background = element_rect(color = "black"),
-             legend.text = element_text(size = 14),
-             legend.title = element_text(size = 15),
-             plot.title = element_text(hjust = 0.5, size = 15),
-             # legend.key = element_rect(color = "black"),
-             legend.box.margin = margin(b = 1, unit = "cm"),
-             plot.subtitle = element_text(hjust = 0.5, size = 7),
-             plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
-             legend.key = element_rect(color = "black"),
-             legend.box.spacing = unit(0, "cm"),
-             legend.direction = "horizontal",
-             plot.background = element_rect(fill = "white", color = "white")) +
-       guides(fill = guide_legend(nrow = 1))
+    } else if (region_level == "district"){
+      plt <- map_data %>%
+        ggplot() +
+        geom_sf(mapping = aes(fill = forcats::fct_reorder(lyl_bucket, order_lyl_bucket)), color = "lightgrey", lwd = 0.05) +
+        ggthemes::theme_map() +
+        scale_fill_manual(values = c("0 to < 0.1" = "#ffffff",
+                                     "0.1 to < 0.5" = "#ffeda0",
+                                     "0.5 to < 1" = "#fed976",
+                                     "1 to < 2" = "#feb24c",
+                                     "2 to < 3" = "#fd8d3c",
+                                     "3 to < 4" = "#fc4e2a",
+                                     "4 to < 5" = "#e31a1c",
+                                     "5 to < 6" = "#bd0026",
+                                     ">= 6" = "#800026")) +
+        ggthemes::theme_map() +
+        labs(fill = "Potential gain in life expectancy (Years) ", title = "") +
+        theme(legend.position = "bottom",
+              legend.justification = c(0.5, 3),
+              legend.background = element_rect(color = "black"),
+              legend.text = element_text(size = 14),
+              legend.title = element_text(size = 15),
+              plot.title = element_text(hjust = 0.5, size = 15),
+              # legend.key = element_rect(color = "black"),
+              legend.box.margin = margin(b = 1, unit = "cm"),
+              plot.subtitle = element_text(hjust = 0.5, size = 7),
+              plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
+              legend.key = element_rect(color = "black"),
+              legend.box.spacing = unit(0, "cm"),
+              legend.direction = "horizontal",
+              plot.background = element_rect(fill = "white", color = "white")) +
+        guides(fill = guide_legend(nrow = 1))
 
-     return(plt)
+      return(plt)
 
-   }
+    }
 
-   #--------------------pollution----------------------------------#
+    #--------------------pollution----------------------------------#
 
   } else if (plot_type == "pollution"){
-   map_data <- map_data %>%
+    map_data <- map_data %>%
       add_aqli_color_scale_buckets("pollution", col_name_plt) %>%
       select(-geometry, geometry) %>%
       st_as_sf()
 
-   if(region_level == "country"){
-     plt <- map_data %>%
-       ggplot() +
-       geom_sf(mapping = aes(fill = forcats::fct_reorder(pol_bucket, order_pol_bucket)), color = "lightgrey", lwd = 0.05) +
-       geom_sf(data = gadm1_aqli_shapefile %>% filter(name0 == country_name), color = "black", fill = "transparent", lwd = 0.5) +
-       ggthemes::theme_map() +
-       scale_fill_manual(values = c("0 to < 5" = "#a1f5ff",
-                                    "5 to < 10" = "#92d4eb",
-                                    "10 to < 20" = "#82b5d5",
-                                    "20 to < 30" = "#7197be",
-                                    "30 to < 40" = "#5f7aa5",
-                                    "40 to < 50" = "#4e5e8b",
-                                    "50 to < 60" = "#3c456f",
-                                    "60 to < 70" = "#2b2d54",
-                                    ">= 70" = "#1a1638")) +
-       ggthemes::theme_map() +
-       labs(fill = expression("Annual Average" ~ PM[2.5] ~ " (in µg/m³)"), title = "") +
-       theme(legend.position = "bottom",
-             legend.justification = c(0.5, 3),
-             legend.background = element_rect(color = "black"),
-             legend.text = element_text(size = 14),
-             legend.title = element_text(size = 15),
-             plot.title = element_text(hjust = 0.5, size = 15),
-             # legend.key = element_rect(color = "black"),
-             legend.box.margin = margin(b = 1, unit = "cm"),
-             plot.subtitle = element_text(hjust = 0.5, size = 7),
-             plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
-             legend.key = element_rect(color = "black"),
-             legend.box.spacing = unit(0, "cm"),
-             legend.direction = "horizontal",
-             plot.background = element_rect(fill = "white", color = "white")) +
-       guides(fill = guide_legend(nrow = 1))
+    if(region_level == "country"){
+      plt <- map_data %>%
+        ggplot() +
+        geom_sf(mapping = aes(fill = forcats::fct_reorder(pol_bucket, order_pol_bucket)), color = "lightgrey", lwd = 0.05) +
+        geom_sf(data = gadm1_aqli_shapefile %>% filter(name0 == country_name), color = "black", fill = "transparent", lwd = 0.5) +
+        ggthemes::theme_map() +
+        scale_fill_manual(values = c("0 to < 5" = "#a1f5ff",
+                                     "5 to < 10" = "#92d4eb",
+                                     "10 to < 20" = "#82b5d5",
+                                     "20 to < 30" = "#7197be",
+                                     "30 to < 40" = "#5f7aa5",
+                                     "40 to < 50" = "#4e5e8b",
+                                     "50 to < 60" = "#3c456f",
+                                     "60 to < 70" = "#2b2d54",
+                                     ">= 70" = "#1a1638")) +
+        ggthemes::theme_map() +
+        labs(fill = expression("Annual Average" ~ PM[2.5] ~ " (in \u03BCg/m\u00B3)"), title = "") +
+        theme(legend.position = "bottom",
+              legend.justification = c(0.5, 3),
+              legend.background = element_rect(color = "black"),
+              legend.text = element_text(size = 14),
+              legend.title = element_text(size = 15),
+              plot.title = element_text(hjust = 0.5, size = 15),
+              # legend.key = element_rect(color = "black"),
+              legend.box.margin = margin(b = 1, unit = "cm"),
+              plot.subtitle = element_text(hjust = 0.5, size = 7),
+              plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
+              legend.key = element_rect(color = "black"),
+              legend.box.spacing = unit(0, "cm"),
+              legend.direction = "horizontal",
+              plot.background = element_rect(fill = "white", color = "white")) +
+        guides(fill = guide_legend(nrow = 1))
 
-     return(plt)
-   } else if (region_level == "state"){
-     plt <- map_data %>%
-       ggplot() +
-       geom_sf(mapping = aes(fill = forcats::fct_reorder(pol_bucket, order_pol_bucket)), color = "lightgrey", lwd = 0.05) +
-       geom_sf(data = gadm1_aqli_shapefile %>% filter(name0 == country_name, name1 == state_name), color = "black", fill = "transparent", lwd = 0.5) +
-       ggthemes::theme_map() +
-       scale_fill_manual(values = c("0 to < 5" = "#a1f5ff",
-                                    "5 to < 10" = "#92d4eb",
-                                    "10 to < 20" = "#82b5d5",
-                                    "20 to < 30" = "#7197be",
-                                    "30 to < 40" = "#5f7aa5",
-                                    "40 to < 50" = "#4e5e8b",
-                                    "50 to < 60" = "#3c456f",
-                                    "60 to < 70" = "#2b2d54",
-                                    ">= 70" = "#1a1638")) +
-       ggthemes::theme_map() +
-       labs(fill = expression("Annual Average" ~ PM[2.5] ~ " (in µg/m³)"), title = "") +
-       theme(legend.position = "bottom",
-             legend.justification = c(0.5, 3),
-             legend.background = element_rect(color = "black"),
-             legend.text = element_text(size = 14),
-             legend.title = element_text(size = 15),
-             plot.title = element_text(hjust = 0.5, size = 15),
-             # legend.key = element_rect(color = "black"),
-             legend.box.margin = margin(b = 1, unit = "cm"),
-             plot.subtitle = element_text(hjust = 0.5, size = 7),
-             plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
-             legend.key = element_rect(color = "black"),
-             legend.box.spacing = unit(0, "cm"),
-             legend.direction = "horizontal",
-             plot.background = element_rect(fill = "white", color = "white")) +
-       guides(fill = guide_legend(nrow = 1))
+      return(plt)
+    } else if (region_level == "state"){
+      plt <- map_data %>%
+        ggplot() +
+        geom_sf(mapping = aes(fill = forcats::fct_reorder(pol_bucket, order_pol_bucket)), color = "lightgrey", lwd = 0.05) +
+        geom_sf(data = gadm1_aqli_shapefile %>% filter(name0 == country_name, name1 == state_name), color = "black", fill = "transparent", lwd = 0.5) +
+        ggthemes::theme_map() +
+        scale_fill_manual(values = c("0 to < 5" = "#a1f5ff",
+                                     "5 to < 10" = "#92d4eb",
+                                     "10 to < 20" = "#82b5d5",
+                                     "20 to < 30" = "#7197be",
+                                     "30 to < 40" = "#5f7aa5",
+                                     "40 to < 50" = "#4e5e8b",
+                                     "50 to < 60" = "#3c456f",
+                                     "60 to < 70" = "#2b2d54",
+                                     ">= 70" = "#1a1638")) +
+        ggthemes::theme_map() +
+        labs(fill = expression("Annual Average" ~ PM[2.5] ~ " (in \u03BCg/m\u00B3)"), title = "") +
+        theme(legend.position = "bottom",
+              legend.justification = c(0.5, 3),
+              legend.background = element_rect(color = "black"),
+              legend.text = element_text(size = 14),
+              legend.title = element_text(size = 15),
+              plot.title = element_text(hjust = 0.5, size = 15),
+              # legend.key = element_rect(color = "black"),
+              legend.box.margin = margin(b = 1, unit = "cm"),
+              plot.subtitle = element_text(hjust = 0.5, size = 7),
+              plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
+              legend.key = element_rect(color = "black"),
+              legend.box.spacing = unit(0, "cm"),
+              legend.direction = "horizontal",
+              plot.background = element_rect(fill = "white", color = "white")) +
+        guides(fill = guide_legend(nrow = 1))
 
-     return(plt)
+      return(plt)
 
-   } else if (region_level == "district"){
-     plt <- map_data %>%
-       ggplot() +
-       geom_sf(mapping = aes(fill = forcats::fct_reorder(pol_bucket, order_pol_bucket)), color = "lightgrey", lwd = 0.05) +
-       ggthemes::theme_map() +
-       scale_fill_manual(values = c("0 to < 5" = "#a1f5ff",
-                                    "5 to < 10" = "#92d4eb",
-                                    "10 to < 20" = "#82b5d5",
-                                    "20 to < 30" = "#7197be",
-                                    "30 to < 40" = "#5f7aa5",
-                                    "40 to < 50" = "#4e5e8b",
-                                    "50 to < 60" = "#3c456f",
-                                    "60 to < 70" = "#2b2d54",
-                                    ">= 70" = "#1a1638")) +
-       ggthemes::theme_map() +
-       labs(fill = expression("Annual Average" ~ PM[2.5] ~ " (in µg/m³)"), title = "") +
-       theme(legend.position = "bottom",
-             legend.justification = c(0.5, 3),
-             legend.background = element_rect(color = "black"),
-             legend.text = element_text(size = 14),
-             legend.title = element_text(size = 15),
-             plot.title = element_text(hjust = 0.5, size = 15),
-             # legend.key = element_rect(color = "black"),
-             legend.box.margin = margin(b = 1, unit = "cm"),
-             plot.subtitle = element_text(hjust = 0.5, size = 7),
-             plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
-             legend.key = element_rect(color = "black"),
-             legend.box.spacing = unit(0, "cm"),
-             legend.direction = "horizontal",
-             plot.background = element_rect(fill = "white", color = "white")) +
-       guides(fill = guide_legend(nrow = 1))
+    } else if (region_level == "district"){
+      plt <- map_data %>%
+        ggplot() +
+        geom_sf(mapping = aes(fill = forcats::fct_reorder(pol_bucket, order_pol_bucket)), color = "lightgrey", lwd = 0.05) +
+        ggthemes::theme_map() +
+        scale_fill_manual(values = c("0 to < 5" = "#a1f5ff",
+                                     "5 to < 10" = "#92d4eb",
+                                     "10 to < 20" = "#82b5d5",
+                                     "20 to < 30" = "#7197be",
+                                     "30 to < 40" = "#5f7aa5",
+                                     "40 to < 50" = "#4e5e8b",
+                                     "50 to < 60" = "#3c456f",
+                                     "60 to < 70" = "#2b2d54",
+                                     ">= 70" = "#1a1638")) +
+        ggthemes::theme_map() +
+        labs(fill = expression("Annual Average" ~ PM[2.5] ~ " (in \u03BCg/m\u00B3)"), title = "") +
+        theme(legend.position = "bottom",
+              legend.justification = c(0.5, 3),
+              legend.background = element_rect(color = "black"),
+              legend.text = element_text(size = 14),
+              legend.title = element_text(size = 15),
+              plot.title = element_text(hjust = 0.5, size = 15),
+              # legend.key = element_rect(color = "black"),
+              legend.box.margin = margin(b = 1, unit = "cm"),
+              plot.subtitle = element_text(hjust = 0.5, size = 7),
+              plot.caption = element_text(hjust = 0.7, size = 9, face = "italic"),
+              legend.key = element_rect(color = "black"),
+              legend.box.spacing = unit(0, "cm"),
+              legend.direction = "horizontal",
+              plot.background = element_rect(fill = "white", color = "white")) +
+        guides(fill = guide_legend(nrow = 1))
 
-   }
+    }
 
   }
 

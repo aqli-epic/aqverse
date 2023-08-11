@@ -1,6 +1,6 @@
-MIT License
+# MIT License
 
-Copyright (c) [2023] [Air Quality Life Index at the Energy Policy Institute of the University of Chicago]
+Copyright (c) 2023 aqverse authors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -10,9 +10,6 @@ An object of class \code{theme} (inherits from \code{gg}) of length 97.
 \usage{
 themes_aqli_base
 }
-\arguments{
-\item{""}{no parameters needed. See examples for usage.}
-}
 \value{
 when added to a plot, returns a plot with the AQLI plots base theme.
 }

@@ -10,17 +10,18 @@ add_aqli_color_scale_buckets(df, scale_type = "pollution", col_name)
 \item{df}{The dataframe to which the AQLI color scales will be added as a character column}
 
 \item{scale_type}{This is a parameter of type \code{character} and can take one of 4 values: (a) \code{lyl}: AQLI life years lost (single year);
-                  (b) \code{pollution}: AQLI pollution (in micrograms per cubic meter, single year); (c) \code{lyldiff}:
-                  Life years lost scale (for difference between 2 years); (d) \code{poldiff}: pollution
-                  difference between 2 years scale (in percent).
+(b) \code{pollution}: AQLI pollution (in micrograms per cubic meter, single year); (c) \code{lyldiff}:
+Life years lost scale (for difference between 2 years); (d) \code{poldiff}: pollution
+difference between 2 years scale (in percent).
 
-                  Note that, while plotting the actual map
-                  that will use this function, make sure to add in the \code{fill} aesthetic of the mapping
-                  function the following (defined here for each scale): \code{lyl} scale:
-                   \code{forcats::fct_reorder(lyl_bucket, order_lyl_bucket)}; \code{pollution} scale:
-                   \code{forcats::fct_reorder(pol_bucket, order_pol_bucket)}; \code{lyldiff} scale:
-                   \code{forcats::fct_reorder(lyldiff_bucket, order_lyldiff_bucket)}; \code{poldiff} scale:
-                   \code{forcats::fct_reorder(poldiff_bucket, order_poldiff_bucket)}}
+\if{html}{\out{<div class="sourceCode">}}\preformatted{              Note that, while plotting the actual map
+              that will use this function, make sure to add in the \code{fill} aesthetic of the mapping
+              function the following (defined here for each scale): \code{lyl} scale:
+               \code{forcats::fct_reorder(lyl_bucket, order_lyl_bucket)}; \code{pollution} scale:
+               \code{forcats::fct_reorder(pol_bucket, order_pol_bucket)}; \code{lyldiff} scale:
+               \code{forcats::fct_reorder(lyldiff_bucket, order_lyldiff_bucket)}; \code{poldiff} scale:
+               \code{forcats::fct_reorder(poldiff_bucket, order_poldiff_bucket)}
+}\if{html}{\out{</div>}}}
 
 \item{col_name}{The column name (type:\code{character}) that will be used to map pollution/life years lost (whether
 single year or difference between 2 years) values to the AQLI colors. Note, that
@@ -28,7 +29,7 @@ this column should be present in \code{df}.}
 }
 \value{
 returns a data frame with an additional column (of class "character") that has the buckets
-        corresponding to the \code{scale_type} specified.
+corresponding to the \code{scale_type} specified.
 }
 \description{
 Adds the buckets (mappping AQLI colors to the corresponding pollution or life years lost
